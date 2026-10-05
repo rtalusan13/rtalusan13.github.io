@@ -4,211 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Raphael Talusan</title>
-  <link rel="icon" href="favicon-32x32.png" type="image/x-icon">
-  <meta name="description" content="Personal website">
-  <style>
-    /* ---------- Reset & base ---------- */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100dvh;
-      background: #ffffff;
-      color: #111827;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.5;
-    }
-    body.menu-open { overflow: hidden; } /* lock scroll behind mobile menu */
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
-    svg { display: block; }
+  <!-- TODO: replace [brackets] with your details -->
+  <meta name="description" content="Raphael Talusan, [major] student at [University]. Projects in digital design, MATLAB, and SystemVerilog.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
 
-    :root {
-      --text: #111827;       /* gray-900 */
-      --text-hover: #4b5563; /* gray-600 */
-      --black: #000000;
-      --black-hover: #1f2937;/* gray-800 */
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
-    }
+  <!-- Link previews (LinkedIn, Discord, iMessage). og:image must be a full URL once the site is live. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Raphael Talusan">
+  <meta property="og:description" content="[Major] student building [what you build].">
+  <!-- <meta property="og:image" content="https://YOUR-USERNAME.github.io/assets/images/portrait.jpg"> -->
 
-    /* ---------- Navbar ---------- */
-    .nav-wrap {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      padding: 24px 16px;
-    }
-    .nav-bar {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 48rem;
-      padding: 12px 24px;
-      background: #fff;
-      border-radius: 9999px;
-      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-
-    .logo {
-      width: 32px;
-      height: 32px;
-      margin-right: 24px;
-      animation: logo-in 0.3s var(--ease-out) both;
-      transition: transform 0.3s var(--ease-out);
-    }
-    .logo:hover { transform: rotate(10deg); }
-
-    .nav-links {
-      display: none;
-      align-items: center;
-      gap: 32px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .nav-links li { animation: fade-down 0.3s var(--ease-out) both; }
-    .nav-links a {
-      display: inline-block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text);
-      transition: color 0.15s, transform 0.2s var(--ease-out);
-    }
-    .nav-links a:hover { color: var(--text-hover); transform: scale(1.05); }
-    .nav-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 20px;
-      font-size: 0.875rem;
-      color: #fff;
-      background: var(--black);
-      border-radius: 9999px;
-      transition: background-color 0.15s, transform 0.2s var(--ease-out);
-    }
-    .btn:hover { background: var(--black-hover); }
-    .cta-desktop { display: none; animation: fade-left 0.3s var(--ease-out) 0.2s both; }
-    .cta-desktop:hover { transform: scale(1.05); }
-
-    .menu-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;          /* comfortable touch target */
-      height: 44px;
-      margin-right: -10px;
-      transition: transform 0.1s;
-    }
-    .menu-btn:active, .close-btn:active { transform: scale(0.9); }
-
-    /* ---------- Mobile overlay ---------- */
-    .mobile-menu {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      padding: 96px 24px 24px;
-      background: #fff;
-      overflow-y: auto;
-      opacity: 0;
-      transform: translateX(100%);
-      visibility: hidden;
-      transition:
-        transform 0.45s var(--ease-spring),
-        opacity 0.3s ease,
-        visibility 0s linear 0.45s;
-    }
-    .mobile-menu.open {
-      opacity: 1;
-      transform: translateX(0);
-      visibility: visible;
-      transition:
-        transform 0.45s var(--ease-spring),
-        opacity 0.3s ease,
-        visibility 0s;
-    }
-    .close-btn {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-    .mobile-menu.open .close-btn { opacity: 1; transition-delay: 0.2s; }
-
-    .mobile-links {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .mobile-links li,
-    .mobile-cta {
-      opacity: 0;
-      transform: translateX(20px);
-      transition: opacity 0.3s, transform 0.3s var(--ease-out);
-    }
-    .mobile-cta { transform: translateY(20px); padding-top: 24px; }
-    .mobile-menu.open .mobile-links li,
-    .mobile-menu.open .mobile-cta { opacity: 1; transform: none; }
-    /* stagger: i * 0.1 + 0.1 */
-    .mobile-menu.open .mobile-links li:nth-child(1) { transition-delay: 0.1s; }
-    .mobile-menu.open .mobile-links li:nth-child(2) { transition-delay: 0.2s; }
-    .mobile-menu.open .mobile-links li:nth-child(3) { transition-delay: 0.3s; }
-    .mobile-menu.open .mobile-links li:nth-child(4) { transition-delay: 0.4s; }
-    .mobile-menu.open .mobile-links li:nth-child(5) { transition-delay: 0.5s; }
-    .mobile-menu.open .mobile-cta { transition-delay: 0.5s; }
-
-    .mobile-links a { font-size: 1rem; font-weight: 500; color: var(--text); }
-    .mobile-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
-    .mobile-cta .btn { width: 100%; padding: 12px 20px; font-size: 1rem; }
-
-    /* ---------- Breakpoint (Tailwind md = 768px) ---------- */
-    @media (min-width: 768px) {
-      .nav-links { display: flex; }
-      .cta-desktop { display: block; }
-      .menu-btn, .mobile-menu { display: none; }
-    }
-
-    /* ---------- Focus & motion ---------- */
-    a:focus-visible, button:focus-visible {
-      outline: 2px solid var(--text);
-      outline-offset: 3px;
-      border-radius: 6px;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-        transition-delay: 0s !important;
-      }
-    }
-
-    /* ---------- Keyframes ---------- */
-    @keyframes logo-in   { from { transform: scale(0.8); } to { transform: scale(1); } }
-    @keyframes fade-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
-    @keyframes fade-left { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
-
-    /* ---------- Page content ---------- */
-    main {
-      width: 100%;
-      max-width: 48rem;
-      margin: 0 auto;
-      padding: 32px 16px;
-    }
-  </style>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
 </head>
 <body>
 
@@ -226,7 +35,6 @@
         </svg>
       </a>
 
-      <!-- Desktop navigation -->
       <nav aria-label="Main">
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
@@ -236,16 +44,12 @@
         </ul>
       </nav>
 
-      <!-- Desktop CTA -->
       <div class="cta-desktop">
         <a href="contact.html" class="btn">Contact Me</a>
       </div>
 
-      <!-- Mobile menu button -->
-      <button class="menu-btn" type="button" aria-label="Open menu"
-              aria-expanded="false" aria-controls="mobile-menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="4" y1="6" x2="20" y2="6"/>
           <line x1="4" y1="12" x2="20" y2="12"/>
           <line x1="4" y1="18" x2="20" y2="18"/>
@@ -253,11 +57,9 @@
       </button>
     </div>
 
-    <!-- Mobile overlay -->
     <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
       <button class="close-btn" type="button" aria-label="Close menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
@@ -277,39 +79,117 @@
   </header>
 
   <main>
-    <!-- Page content goes here -->
+
+    <!-- ===================== HERO =====================
+         Who you are + what you do + where to click, all in the first screen. -->
+    <section class="hero" aria-labelledby="hero-name">
+      <figure class="hero-photo reveal" style="--delay: .1s">
+        <!-- Recommended: 800×1000 JPG/WebP, under ~200 KB -->
+        <img src="assets/images/portrait.jpg" width="800" height="1000"
+             alt="Portrait of Raphael Talusan" fetchpriority="high">
+      </figure>
+
+      <div class="hero-text reveal">
+        <p class="eyebrow">[Major] student at [University]</p>
+        <h1 class="hero-name" id="hero-name">Raphael Talusan</h1>
+        <p class="hero-pitch">
+          I [design / build / study] [what you work on], from [one end] to [the other].
+          Currently focused on [area], and looking for [internships / roles] in [field].
+        </p>
+        <div class="hero-actions">
+          <a href="projects.html" class="btn btn-lg">View projects</a>
+          <a href="resume.html" class="btn btn-lg btn-outline">Resume</a>
+        </div>
+        <ul class="social">
+          <li><a href="https://github.com/YOUR-USERNAME">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/YOUR-PROFILE">LinkedIn</a></li>
+          <li><a href="mailto:you@example.com">Email</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURED PROJECTS =====================
+         Put your strongest project first: it gets the large card. -->
+    <section class="section" aria-labelledby="featured-title">
+      <div class="section-head">
+        <h2 class="h2" id="featured-title">Featured projects</h2>
+        <a href="projects.html" class="link-arrow">All projects <span aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <div class="project-grid reveal">
+        <article class="project-card featured">
+          <div class="project-media">
+            <!-- Recommended: 1200×750 (16:10). Screenshots, scope captures, board photos. -->
+            <img src="assets/images/project-1.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <span class="project-kicker">Featured</span>
+            <h3><a href="projects.html#project-1">[Project name]</a></h3>
+            <p>[What it is, what you built, and one concrete result. A number beats an adjective: "runs at 100 MHz on an Artix-7" says more than "fast".]</p>
+            <ul class="tags"><li>SystemVerilog</li><li>FPGA</li></ul>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-media">
+            <img src="assets/images/project-2.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <h3><a href="projects.html#project-2">[Project name]</a></h3>
+            <p>[One or two sentences with a concrete result.]</p>
+            <ul class="tags"><li>MATLAB</li><li>DSP</li></ul>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-media">
+            <img src="assets/images/project-3.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <h3><a href="projects.html#project-3">[Project name]</a></h3>
+            <p>[One or two sentences with a concrete result.]</p>
+            <ul class="tags"><li>Python</li></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="section about" aria-labelledby="about-title">
+      <figure class="about-media reveal">
+        <!-- Recommended: 1200×900 (4:3). You at work: lab bench, hackathon, club, etc. -->
+        <img src="assets/images/about.jpg" width="1200" height="900" alt="[Describe the photo]" loading="lazy">
+      </figure>
+
+      <div class="about-text reveal" style="--delay: .1s">
+        <h2 class="h2" id="about-title">About me</h2>
+        <p>[Two or three sentences: how you got into this field and what keeps you in it. Write it the way you'd say it out loud.]</p>
+        <p>[One or two sentences on what you're doing outside of class: clubs, research, side projects.]</p>
+
+        <dl class="facts">
+          <dt>Studying</dt>  <dd>[Degree], [University], [Year]</dd>
+          <dt>Focus</dt>     <dd>[Digital design, signal processing, ...]</dd>
+          <dt>Currently</dt> <dd>[What you're building or learning now]</dd>
+          <dt>Seeking</dt>   <dd>[Summer 2027 internships in ...]</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================== CLOSING CTA ===================== -->
+    <section class="section cta-band reveal" aria-labelledby="cta-title">
+      <h2 class="h2" id="cta-title">Let's work together</h2>
+      <p>[One line on what you're open to: internships, research, collaborations.]</p>
+      <a href="contact.html" class="btn btn-lg">Contact Me</a>
+    </section>
+
   </main>
 
-  <script>
-    (function () {
-      const menu = document.getElementById("mobile-menu");
-      const openBtn = document.querySelector(".menu-btn");
-      const closeBtn = menu.querySelector(".close-btn");
-
-      function setOpen(open) {
-        menu.classList.toggle("open", open);
-        document.body.classList.toggle("menu-open", open);
-        openBtn.setAttribute("aria-expanded", String(open));
-        (open ? closeBtn : openBtn).focus();
-      }
-
-      openBtn.addEventListener("click", () => setOpen(true));
-      closeBtn.addEventListener("click", () => setOpen(false));
-      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setOpen(false)));
-      document.addEventListener("keydown", e => {
-        if (e.key === "Escape" && menu.classList.contains("open")) setOpen(false);
-      });
-      // Close if the window is resized up to desktop width while open
-      matchMedia("(min-width: 768px)").addEventListener("change", e => {
-        if (e.matches && menu.classList.contains("open")) setOpen(false);
-      });
-
-      // Mark the current page's link
-      const current = location.pathname.split("/").pop() || "index.html";
-      document.querySelectorAll(".nav-links a, .mobile-links a").forEach(a => {
-        if (a.getAttribute("href") === current) a.setAttribute("aria-current", "page");
-      });
-    })();
-  </script>
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Raphael Talusan</span>
+    <ul>
+      <li><a href="https://github.com/YOUR-USERNAME">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/YOUR-PROFILE">LinkedIn</a></li>
+    </ul>
+  </footer>
 </body>
 </html>

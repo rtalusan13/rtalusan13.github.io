@@ -1,0 +1,121 @@
+/* =========================================================
+   CAROUSEL COMPONENT  (pairs with js/carousel.js)
+   Link this file only on pages that use a carousel.
+
+   Variants (data-variant on the carousel):
+     "single" ... one photo at a time, full width of its column
+     "focus" .... (default) centre photo sharp, neighbours peek
+                  in from the sides, blurred, smaller and faded
+
+   Knobs you can set per carousel with style="...":
+     --fp-aspect   photo shape, default 4 / 3 (phone photos)
+     --fp-w        photo width in the "focus" variant
+   ========================================================= */
+
+.fp-root {
+  --fp-w: min(72cqi, 600px);
+  --fp-aspect: 4 / 3;
+  --fp-edge: calc(50cqi - var(--fp-w) / 2);   /* space beside the centre photo */
+  position: relative;
+  container-type: inline-size;                /* cqi = % of this carousel's width */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: var(--radius);
+  outline: none;
+}
+.fp-root[data-variant="single"] { --fp-w: 100cqi; }
+.fp-root:focus-visible { outline: 2px solid var(--text); outline-offset: 6px; }
+.fp-root > template { display: none; }
+
+/* ---------- Track: native horizontal scroll with snapping ---------- */
+.fp-track {
+  position: relative;                         /* card.offsetLeft is measured from here */
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5cqi, 24px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline: var(--fp-edge);
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+.fp-track::-webkit-scrollbar { display: none; }
+@media (hover: hover) and (pointer: fine) { .fp-track { cursor: grab; } }
+.fp-track[data-drag="1"] { scroll-snap-type: none; cursor: grabbing; }
+
+/* ---------- One photo ---------- */
+.fp-card {
+  position: relative;
+  flex: 0 0 var(--fp-w);
+  aspect-ratio: var(--fp-aspect);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface);                 /* shows while the photo loads */
+  scroll-snap-align: center;
+  cursor: inherit;
+}
+.fp-root[data-variant="focus"] .fp-card { will-change: transform, filter; }
+.fp-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ---------- Caption, counter, arrows (aligned to the photo's edges) ---------- */
+.fp-meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding-inline: var(--fp-edge);
+}
+.fp-cap { margin: 0; min-height: 1.6em; overflow: hidden; font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
+.fp-cap > span { display: block; animation: fp-in 0.7s var(--ease-out) both; }
+.fp-count { margin: 0; font: 500 0.75rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.14em; color: var(--faint); text-align: center; }
+.fp-count b { color: var(--text); font-weight: 500; }
+.fp-nav { display: flex; justify-content: flex-end; gap: 8px; }
+.fp-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.fp-btn:hover { background: var(--text); border-color: var(--text); color: #fff; }
+
+/* ---------- Timer bar: fills over data-autoplay ms, then the next photo shows.
+   Freezes while hovered, pressed, keyboard-focused, or off screen. ---------- */
+.fp-bar { height: 3px; margin-inline: var(--fp-edge); overflow: hidden; border-radius: 3px; background: var(--line); }
+.fp-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--text); transform-origin: left; transform: scaleX(0); }
+
+.fp-sr { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Only one photo: nothing to navigate */
+.fp-root.fp-one .fp-nav,
+.fp-root.fp-one .fp-count,
+.fp-root.fp-one .fp-bar { display: none; }
+
+/* Narrow carousels (phones, or a small column): drop the counter */
+@container (max-width: 520px) {
+  .fp-meta { grid-template-columns: 1fr auto; }
+  .fp-count { display: none; }
+}
+@media (max-width: 640px) {
+  .fp-root[data-variant="focus"] { --fp-w: 76cqi; }
+}
+
+@keyframes fp-in { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }

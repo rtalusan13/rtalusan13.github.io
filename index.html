@@ -1,97 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  HOME PAGE
+  Sections, top to bottom (search for the ===== banners):
+    1. HERO .................. name, one-line pitch, buttons
+    2. FEATURED PROJECTS ..... project cards
+    3. ABOUT ................. about text, photo carousel, quick facts
+    4. CLOSING CTA ........... "Let's work together"
+
+  Edited somewhere else, once for every page:
+    nav bar + footer ......... js/layout.js
+    colors, fonts, spacing ... css/style.css (section 1)
+  See README.md for step-by-step recipes.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Raphael Talusan</title>
-  <!-- TODO: replace [brackets] with your details -->
   <meta name="description" content="Raphael Talusan, Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
 
-  <!-- Link previews (LinkedIn, Discord, iMessage). og:image must be a full URL once the site is live. -->
+  <!-- Link previews (LinkedIn, Discord, iMessage). -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Raphael Talusan">
   <meta property="og:description" content="Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
-  <!-- <meta property="og:image" content="https://YOUR-USERNAME.github.io/assets/images/portrait.jpg"> -->
+  <!-- <meta property="og:image" content="https://rtalusan13.github.io/assets/images/portrait.jpg"> -->
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/carousel.css">
+  <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
   <script src="js/carousel.js" defer></script>
 </head>
 <body>
 
-  <header class="nav-wrap">
-    <div class="nav-bar">
-      <a href="index.html" class="logo" aria-label="Home">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <circle cx="16" cy="16" r="16" fill="url(#logo-grad)"/>
-          <defs>
-            <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#FF9966"/>
-              <stop offset="1" stop-color="#FF5E62"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </a>
-
-      <nav aria-label="Main">
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="resume.html">Resume</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="journal.html">Journal</a></li>
-        </ul>
-      </nav>
-
-      <div class="cta-desktop">
-        <a href="contact.html" class="btn">Contact Me</a>
-      </div>
-
-      <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="4" y1="6" x2="20" y2="6"/>
-          <line x1="4" y1="12" x2="20" y2="12"/>
-          <line x1="4" y1="18" x2="20" y2="18"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
-      <button class="close-btn" type="button" aria-label="Close menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-      <nav aria-label="Mobile">
-        <ul class="mobile-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="resume.html">Resume</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="journal.html">Journal</a></li>
-        </ul>
-      </nav>
-      <div class="mobile-cta">
-        <a href="contact.html" class="btn">Contact Me</a>
-      </div>
-    </div>
-  </header>
+  <site-header></site-header>
 
   <main>
 
-    <!-- ===================== HERO =====================
-         Who you are + what you do + where to click, all in the first screen. -->
+    <!-- ===================== 1. HERO ===================== -->
     <section class="hero" aria-labelledby="hero-name">
       <figure class="hero-photo reveal" style="--delay: .1s">
-        <!-- Recommended: 800×1000 JPG/WebP, under ~200 KB -->
+        <!-- 800×1000 JPG, under ~200 KB -->
         <img src="assets/images/portrait.jpg" width="800" height="1000"
              alt="Portrait of Raphael Talusan" fetchpriority="high">
       </figure>
 
       <div class="hero-text reveal">
-        <p class="eyebrow">Computer Engineering student at UIUC</p>
+        <p class="eyebrow"><span>Computer Engineering student at <img class="inline-logo" src="assets/logos/uiuc-block-i.svg" alt="UIUC"></span></p>
         <h1 class="hero-name" id="hero-name">Raphael Talusan</h1>
         <p class="hero-pitch">
           I [design / build / study] [what you work on], from [one end] to [the other].
@@ -102,15 +60,20 @@
           <a href="resume.html" class="btn btn-lg btn-outline">Resume</a>
         </div>
         <ul class="social">
-          <li><a href="https://github.com/YOUR-USERNAME">GitHub</a></li>
+          <li><a href="https://github.com/rtalusan13">GitHub</a></li>
           <li><a href="https://www.linkedin.com/in/YOUR-PROFILE">LinkedIn</a></li>
           <li><a href="mailto:you@example.com">Email</a></li>
         </ul>
       </div>
     </section>
 
-    <!-- ===================== FEATURED PROJECTS =====================
-         Put your strongest project first: it gets the large card. -->
+
+    <!-- ===================== 2. FEATURED PROJECTS =====================
+         One <article> per project. To add one, copy a whole
+         <article> ... </article> block and change its text.
+         - class="project-card featured" on the FIRST card only: it gets the wide layout.
+         - Image: 1200×750 (16:10) in assets/images/.
+         - Link: points at that project's section on projects.html. -->
     <section class="section" aria-labelledby="featured-title">
       <div class="section-head">
         <h2 class="h2" id="featured-title">Featured projects</h2>
@@ -118,9 +81,10 @@
       </div>
 
       <div class="project-grid reveal">
+
+        <!-- Project 1 (featured) -->
         <article class="project-card featured">
           <div class="project-media">
-            <!-- Recommended: 1200×750 (16:10). Screenshots, scope captures, board photos. -->
             <img src="assets/images/project-1.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
           </div>
           <div class="project-body">
@@ -131,6 +95,7 @@
           </div>
         </article>
 
+        <!-- Project 2 -->
         <article class="project-card">
           <div class="project-media">
             <img src="assets/images/project-2.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
@@ -142,6 +107,7 @@
           </div>
         </article>
 
+        <!-- Project 3 -->
         <article class="project-card">
           <div class="project-media">
             <img src="assets/images/project-3.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
@@ -152,15 +118,33 @@
             <ul class="tags"><li>Python</li></ul>
           </div>
         </article>
+
       </div>
     </section>
 
-    <!-- ===================== ABOUT ===================== -->
+
+    <!-- ===================== 3. ABOUT ===================== -->
     <section class="section about" aria-labelledby="about-title">
+
       <div class="about-text reveal">
         <h2 class="h2" id="about-title">About me</h2>
         <p>[Two or three sentences: how you got into this field and what keeps you in it. Write it the way you'd say it out loud.]</p>
         <p>[One or two sentences on what you're doing outside of class: clubs, research, side projects.]</p>
+      </div>
+
+      <!-- Photo carousel. One <img> per photo, in the order shown.
+             src        = file in image_carousel/ (about 1600 px wide, under ~500 KB)
+             data-title = caption under the photo
+             alt        = what the photo shows, for screen readers
+           data-variant="single" shows one photo at a time; remove it for the
+           blurred "focus" style. data-autoplay = ms per photo (0 = off). -->
+      <div class="fp-root about-carousel reveal" data-carousel data-variant="single" data-autoplay="5000" aria-label="Photos">
+        <template>
+          <img src="image_carousel/pc-build-parts.jpg" data-title="Building my new PC"
+               alt="PC components still in their packaging, laid out on a table">
+          <img src="image_carousel/pc-test-bench.jpg" data-title="First boot on the test bench"
+               alt="The assembled PC running outside its case, sitting on the motherboard box">
+        </template>
       </div>
 
       <dl class="facts reveal" style="--delay: .1s">
@@ -170,34 +154,10 @@
         <dt>Seeking</dt>   <dd>Summer 2027 internships in Digital Design, FPGA Development, or Design Verification</dd>
       </dl>
 
-      <!-- Photo carousel: shows every image in image_carousel/ automatically.
-           File name = order + caption, e.g. 3_Soldering_the_FPGA_board.jpg
-           -> third slide, caption "Soldering the FPGA board". -->
-      <div class="fp-root about-carousel reveal" data-carousel
-           data-folder="image_carousel"
-           data-manifest="js/carousel-images.json"
-           data-repo="rtalusan13/rtalusan13.github.io"
-           data-autoplay="5000"
-           role="region" aria-roledescription="carousel" aria-label="Photos" tabindex="0" hidden>
-        <div class="fp-track"></div>
-        <div class="fp-meta">
-          <p class="fp-cap" aria-hidden="true"></p>
-          <p class="fp-count" aria-hidden="true"></p>
-          <div class="fp-nav">
-            <button type="button" class="fp-btn" data-dir="-1" aria-label="Previous photo">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6"/></svg>
-            </button>
-            <button type="button" class="fp-btn" data-dir="1" aria-label="Next photo">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="fp-bar" aria-hidden="true"><i></i></div>
-        <p class="fp-sr" aria-live="polite"></p>
-      </div>
     </section>
 
-    <!-- ===================== CLOSING CTA ===================== -->
+
+    <!-- ===================== 4. CLOSING CTA ===================== -->
     <section class="section cta-band reveal" aria-labelledby="cta-title">
       <h2 class="h2" id="cta-title">Let's work together</h2>
       <p>[One line on what you're open to: internships, research, collaborations.]</p>
@@ -206,12 +166,7 @@
 
   </main>
 
-  <footer class="site-footer">
-    <span>&copy; <span data-year>2026</span> Raphael Talusan</span>
-    <ul>
-      <li><a href="https://github.com/YOUR-USERNAME">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/YOUR-PROFILE">LinkedIn</a></li>
-    </ul>
-  </footer>
+  <site-footer></site-footer>
+
 </body>
 </html>

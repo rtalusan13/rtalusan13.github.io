@@ -1,4 +1,10 @@
-// Shared site script: mobile menu, current-page highlight, scroll reveal, footer year.
+// =========================================================
+// SHARED BEHAVIOUR for every page (loaded with defer, after
+// js/layout.js has drawn the nav bar):
+//   - phone menu open/close
+//   - underline the current page in the nav
+//   - fade sections in as they scroll into view (add class="reveal")
+// =========================================================
 (function () {
   /* ---------- Mobile menu ---------- */
   const menu = document.getElementById("mobile-menu");
@@ -49,7 +55,4 @@
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
     items.forEach(el => io.observe(el));
   }
-
-  /* ---------- Footer year ---------- */
-  document.querySelectorAll("[data-year]").forEach(el => (el.textContent = new Date().getFullYear()));
 })();

@@ -1,5 +1,0 @@
----
-# GitHub Pages rewrites this file on every push with the path of every file in
-# image_carousel/. Don't edit it: add, rename or remove images in that folder.
----
-[{% assign sep = "" %}{% for f in site.static_files %}{% if f.path contains "/image_carousel/" %}{{ sep }}{{ f.path | jsonify }}{% assign sep = "," %}{% endif %}{% endfor %}]

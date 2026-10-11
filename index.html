@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Raphael Talusan</title>
   <!-- TODO: replace [brackets] with your details -->
-  <meta name="description" content="Raphael Talusan, [major] student at [University]. Projects in digital design, MATLAB, and SystemVerilog.">
+  <meta name="description" content="Raphael Talusan, Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
 
   <!-- Link previews (LinkedIn, Discord, iMessage). og:image must be a full URL once the site is live. -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Raphael Talusan">
-  <meta property="og:description" content="[Major] student building [what you build].">
+  <meta property="og:description" content="Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
   <!-- <meta property="og:image" content="https://YOUR-USERNAME.github.io/assets/images/portrait.jpg"> -->
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
+  <script src="js/carousel.js" defer></script>
 </head>
 <body>
 
@@ -90,7 +91,7 @@
       </figure>
 
       <div class="hero-text reveal">
-        <p class="eyebrow">[Major] student at [University]</p>
+        <p class="eyebrow">Computer Engineering student at UIUC</p>
         <h1 class="hero-name" id="hero-name">Raphael Talusan</h1>
         <p class="hero-pitch">
           I [design / build / study] [what you work on], from [one end] to [the other].
@@ -156,22 +157,43 @@
 
     <!-- ===================== ABOUT ===================== -->
     <section class="section about" aria-labelledby="about-title">
-      <figure class="about-media reveal">
-        <!-- Recommended: 1200×900 (4:3). You at work: lab bench, hackathon, club, etc. -->
-        <img src="assets/images/about.jpg" width="1200" height="900" alt="[Describe the photo]" loading="lazy">
-      </figure>
-
-      <div class="about-text reveal" style="--delay: .1s">
+      <div class="about-text reveal">
         <h2 class="h2" id="about-title">About me</h2>
         <p>[Two or three sentences: how you got into this field and what keeps you in it. Write it the way you'd say it out loud.]</p>
         <p>[One or two sentences on what you're doing outside of class: clubs, research, side projects.]</p>
+      </div>
 
-        <dl class="facts">
-          <dt>Studying</dt>  <dd>[Degree], [University], [Year]</dd>
-          <dt>Focus</dt>     <dd>[Digital design, signal processing, ...]</dd>
-          <dt>Currently</dt> <dd>[What you're building or learning now]</dd>
-          <dt>Seeking</dt>   <dd>[Summer 2027 internships in ...]</dd>
-        </dl>
+      <dl class="facts reveal" style="--delay: .1s">
+        <dt>Studying</dt>  <dd>Computer Engineering (Stats Minor), UIUC Class of 2028</dd>
+        <dt>Focus</dt>     <dd>Digital Design &amp; Hardware Verification</dd>
+        <dt>Currently</dt> <dd>Learning operating systems programming and working as a Systems Engineering Co-Op</dd>
+        <dt>Seeking</dt>   <dd>Summer 2027 internships in Digital Design, FPGA Development, or Design Verification</dd>
+      </dl>
+
+      <!-- Photo carousel: shows every image in image_carousel/ automatically.
+           File name = order + caption, e.g. 3_Soldering_the_FPGA_board.jpg
+           -> third slide, caption "Soldering the FPGA board". -->
+      <div class="fp-root about-carousel reveal" data-carousel
+           data-folder="image_carousel"
+           data-manifest="js/carousel-images.json"
+           data-repo="rtalusan13/rtalusan13.github.io"
+           data-autoplay="5000"
+           role="region" aria-roledescription="carousel" aria-label="Photos" tabindex="0" hidden>
+        <div class="fp-track"></div>
+        <div class="fp-meta">
+          <p class="fp-cap" aria-hidden="true"></p>
+          <p class="fp-count" aria-hidden="true"></p>
+          <div class="fp-nav">
+            <button type="button" class="fp-btn" data-dir="-1" aria-label="Previous photo">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            </button>
+            <button type="button" class="fp-btn" data-dir="1" aria-label="Next photo">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="fp-bar" aria-hidden="true"><i></i></div>
+        <p class="fp-sr" aria-live="polite"></p>
       </div>
     </section>
 

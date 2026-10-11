@@ -321,27 +321,141 @@ main {
 }
 
 /* ---------- About ----------
-   Image on the left on desktop, mirroring the hero (photo right),
-   so the eye zigzags down the page. */
-.about { display: grid; gap: 28px; align-items: center; }
-.about-media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); background: var(--surface); }
+   Phone: text, facts, carousel stacked.
+   Desktop: text and facts side by side, carousel full width below
+   (the focus-pull effect needs width to show the blurred neighbours). */
+.about { display: grid; gap: 28px; }
 .about-text .h2 { margin-bottom: 16px; }
 .about-text p { max-width: 62ch; }
 .about-text p + p { margin-top: 14px; }
 .facts {
   display: grid;
   grid-template-columns: max-content 1fr;
+  align-content: start;
   gap: 10px 24px;
-  margin: 28px 0 0;
+  margin: 0;
   padding-top: 22px;
   border-top: 1px solid var(--line);
 }
 .facts dt { padding-top: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
 .facts dd { margin: 0; }
+.about-carousel { margin-top: 16px; }
 
 @media (min-width: 768px) {
-  .about { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 72px); }
+  .about {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(40px, 6vw, 72px);
+    row-gap: 56px;
+  }
+  .about .facts { margin-top: 56px; }          /* line up with the first paragraph */
+  .about-carousel { grid-column: 1 / -1; margin-top: 0; }
 }
+
+/* =========================================================
+   Focus-pull carousel
+   The centre photo is sharp; neighbours blur, shrink and fade
+   by distance from the middle, updated every scroll frame.
+   Built on native scroll snapping (touch, trackpad, keyboard).
+   ========================================================= */
+.fp-root {
+  --fp-w: min(72cqi, 600px);      /* width of one photo */
+  --fp-aspect: 4 / 3;             /* phone photos are 4:3 */
+  --fp-edge: calc(50cqi - var(--fp-w) / 2);
+  position: relative;
+  container-type: inline-size;    /* cqi = % of this carousel's width */
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-radius: var(--radius);
+  outline: none;
+}
+.fp-root[hidden] { display: none; }  /* author `display` would otherwise beat [hidden] */
+.fp-root:focus-visible { outline: 2px solid var(--text); outline-offset: 6px; }
+
+.fp-track {
+  position: relative;             /* makes card.offsetLeft relative to the track */
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5cqi, 24px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline: var(--fp-edge);
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+.fp-track::-webkit-scrollbar { display: none; }
+@media (hover: hover) and (pointer: fine) { .fp-track { cursor: grab; } }
+.fp-track[data-drag="1"] { scroll-snap-type: none; cursor: grabbing; }
+
+.fp-card {
+  position: relative;
+  flex: 0 0 var(--fp-w);
+  aspect-ratio: var(--fp-aspect);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface);     /* shows while the photo loads */
+  scroll-snap-align: center;
+  cursor: inherit;
+  will-change: transform, filter;
+}
+.fp-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Caption, counter and arrows line up with the centre photo's edges */
+.fp-meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding-inline: var(--fp-edge);
+}
+.fp-cap { margin: 0; min-height: 1.6em; overflow: hidden; font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
+.fp-cap > span { display: block; animation: fp-in 0.7s var(--ease-out) both; }
+.fp-count { margin: 0; font: 500 0.75rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.14em; color: var(--faint); text-align: center; }
+.fp-count b { color: var(--text); font-weight: 500; }
+.fp-nav { display: flex; justify-content: flex-end; gap: 8px; }
+.fp-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.fp-btn:hover { background: var(--text); border-color: var(--text); color: #fff; }
+
+.fp-bar { height: 2px; margin-inline: var(--fp-edge); overflow: hidden; border-radius: 2px; background: var(--line); }
+.fp-bar > i { display: block; height: 100%; background: var(--text); transform-origin: left; transform: scaleX(var(--fp-p, 0)); }
+
+.fp-sr { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* One photo: nothing to navigate */
+.fp-root.fp-single .fp-nav,
+.fp-root.fp-single .fp-count,
+.fp-root.fp-single .fp-bar { display: none; }
+
+@media (max-width: 640px) {
+  .fp-root { --fp-w: 76cqi; }
+  .fp-meta { grid-template-columns: 1fr auto; }
+  .fp-count { display: none; }
+}
+
+@keyframes fp-in { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* ---------- Closing call to action ---------- */
 .cta-band {

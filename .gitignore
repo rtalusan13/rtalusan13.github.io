@@ -1,0 +1,8 @@
+# macOS Finder metadata
+.DS_Store
+
+# Full-size photo originals. Keep these out of the repo:
+# GitHub rejects files over 100 MB, and the site only needs the web copies
+# in image_carousel/ (about 1600 px wide, a few hundred KB each).
+pc_core.png
+pc_unbuilt.png

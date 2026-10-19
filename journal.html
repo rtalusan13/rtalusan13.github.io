@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  JOURNAL PAGE: the list of entries.
+  Each entry is a Markdown file in journals/. Its title, caption and dates
+  are written at the top of that file (see journals/hello-world.md).
+  The entry itself opens in journal-entry.html.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,25 +15,30 @@
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Using a carousel on this page? Also add:
-       <link rel="stylesheet" href="css/carousel.css">
-       <script src="js/carousel.js" defer></script> -->
+  <link rel="stylesheet" href="css/journal.css">
   <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
+  <script src="js/journal.js" defer></script>
 </head>
 <body>
 
   <site-header></site-header>
 
   <main>
-    <header class="page-head reveal">
+    <header class="page-head journal-head reveal">
       <h1 class="page-title">Journal</h1>
-      <p class="lede">Coming soon.</p>
+      <p class="lede">Thoughts, ideas, and clarifications.</p>
     </header>
 
-    <!-- Page content goes here. Wrap each part in
-         <section class="section"> ... </section> for consistent spacing. -->
-
+    <!-- ===================== ENTRIES =====================
+         One file name per line, from the journals/ folder.
+         Any order: the page sorts newest first by "published".
+         To hide a draft, leave its line out. -->
+    <section class="journal" data-journal-index aria-label="Journal entries">
+      <template>
+        hello-world.md
+      </template>
+    </section>
   </main>
 
   <site-footer></site-footer>

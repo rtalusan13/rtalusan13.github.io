@@ -32,9 +32,12 @@
 
   /* ---------- Current page ----------
      Compares full paths, and treats /resume, /resume.html, / and /index.html
-     consistently (GitHub Pages serves pages both with and without .html). */
+     consistently (GitHub Pages serves pages both with and without .html).
+     A page that isn't in the nav can say which link to underline:
+       <body data-nav="journal.html">   (used by journal-entry.html) */
   const clean = path => path.replace(/\.html$/, "").replace(/\/index$/, "/");
-  const here = clean(location.pathname);
+  const navFor = document.body.dataset.nav;
+  const here = clean(navFor ? new URL(navFor, location.href).pathname : location.pathname);
   document.querySelectorAll(".nav-links a, .mobile-links a").forEach(a => {
     if (clean(new URL(a.href).pathname) === here) a.setAttribute("aria-current", "page");
   });

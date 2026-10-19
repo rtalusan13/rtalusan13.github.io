@@ -109,10 +109,10 @@
 .fp-root.fp-one .fp-count,
 .fp-root.fp-one .fp-bar { display: none; }
 
-/* Narrow carousels (phones, or a small column): drop the counter */
+/* Narrow carousels (phones, or a small column): the counter moves
+   from the centre to sit just left of the arrows */
 @container (max-width: 520px) {
-  .fp-meta { grid-template-columns: 1fr auto; }
-  .fp-count { display: none; }
+  .fp-meta { grid-template-columns: 1fr auto auto; gap: 12px; }
 }
 @media (max-width: 640px) {
   .fp-root[data-variant="focus"] { --fp-w: 76cqi; }

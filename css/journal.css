@@ -1,0 +1,82 @@
+/* =========================================================
+   JOURNAL  (pairs with js/journal.js)
+   journal.html ........... list of entries (section A)
+   journal-entry.html ..... one entry, rendered from Markdown (section B)
+   ========================================================= */
+
+/* Journal pages use a narrower, centred column (same width as the nav bar) */
+.journal-head,
+.journal,
+.entry { max-width: var(--nav-width); margin-inline: auto; }
+
+
+/* ---------- A. Journal page: title, rule, list ---------- */
+.journal-head { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 0; }
+
+.journal-list { list-style: none; margin: 0; padding: 0; }
+
+/* One entry: dates stacked on the left, title + caption on the right */
+.journal-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 4px clamp(16px, 4vw, 40px);
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.journal-dates { display: grid; gap: 12px; align-content: start; margin: 0; padding-top: 5px; }
+.journal-dates > div { display: grid; gap: 2px; }
+.journal-dates dt,
+.entry-meta dt { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.journal-dates dd { margin: 0; font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.journal-title { margin: 0 0 6px; font-size: clamp(1.2rem, 2.6vw, 1.45rem); letter-spacing: -0.015em; }
+.journal-title a::after { content: ""; position: absolute; inset: 0; }   /* whole row is the link */
+.journal-title a:focus-visible { outline: none; }
+.journal-caption { max-width: 60ch; color: var(--muted); }
+.journal-read { display: inline-block; margin-top: 12px; font-size: 0.9375rem; font-weight: 500; }
+.journal-read span { display: inline-block; transition: transform 0.2s var(--ease-out); }
+
+.journal-item:hover .journal-title a { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.journal-item:hover .journal-read span { transform: translateX(3px); }
+.journal-item:has(a:focus-visible) { outline: 2px solid var(--text); outline-offset: 6px; border-radius: 6px; }
+
+.journal-status { padding: 28px 0; color: var(--muted); }
+
+@media (max-width: 480px) {
+  .journal-item { grid-template-columns: 6.25rem minmax(0, 1fr); gap: 4px 16px; }
+  .journal-dates dd { font-size: 0.8125rem; }
+}
+
+
+/* ---------- B. Entry page ---------- */
+.entry-back { display: inline-flex; gap: 6px; margin-bottom: 28px; font-size: 0.9375rem; font-weight: 500; color: var(--muted); }
+.entry-back:hover { color: var(--text); }
+.entry-head { padding-bottom: 24px; margin-bottom: 36px; border-bottom: 1px solid var(--line); }
+.entry-head .page-title { margin-bottom: 10px; }
+.entry-meta { display: flex; flex-wrap: wrap; gap: 6px 28px; margin: 18px 0 0; }
+.entry-meta > div { display: flex; align-items: baseline; gap: 8px; }
+.entry-meta dd { margin: 0; font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Article text rendered from Markdown */
+.prose { max-width: 68ch; font-size: 1.0625rem; line-height: 1.75; }
+.prose > * + * { margin-top: 1.15em; }
+.prose h2 { margin-top: 2em; font-size: 1.5rem; letter-spacing: -0.02em; }
+.prose h3 { margin-top: 1.7em; font-size: 1.2rem; }
+.prose h2, .prose h3 { scroll-margin-top: 24px; }
+.prose h2 + *, .prose h3 + * { margin-top: 0.6em; }
+.prose a { text-decoration: underline; text-decoration-color: #9ca3af; text-underline-offset: 3px; }
+.prose a:hover { text-decoration-color: currentColor; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li + li { margin-top: 0.35em; }
+.prose blockquote { margin-inline: 0; padding-left: 1em; border-left: 3px solid var(--line); color: var(--muted); }
+.prose code { padding: 0.1em 0.35em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.prose pre { overflow-x: auto; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; line-height: 1.55; }
+.prose pre code { padding: 0; font-size: 0.875rem; background: none; border: 0; }
+.prose img { display: block; margin-inline: auto; border-radius: 14px; }
+.prose figure { margin: 2em 0; }
+.prose figcaption { margin-top: 10px; font-size: 0.875rem; color: var(--faint); text-align: center; }
+.prose hr { margin: 2.5em 0; border: 0; border-top: 1px solid var(--line); }
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; }
+.prose th, .prose td { padding: 8px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.prose th { font-weight: 600; }

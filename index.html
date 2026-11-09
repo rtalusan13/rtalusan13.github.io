@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  HOME PAGE
+  Sections, top to bottom (search for the ===== banners):
+    1. HERO .................. name, one-line pitch, buttons
+    2. FEATURED PROJECTS ..... project cards
+    3. ABOUT ................. about text, photo carousel, quick facts
+    4. CLOSING CTA ........... "Let's work together"
+
+  Edited somewhere else, once for every page:
+    nav bar + footer ......... js/layout.js
+    colors, fonts, spacing ... css/style.css (section 1)
+  See README.md for step-by-step recipes.
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raphael Talusan</title>
+  <meta name="description" content="Raphael Talusan, Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
+
+  <!-- Link previews (LinkedIn, Discord, iMessage). -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Raphael Talusan">
+  <meta property="og:description" content="Computer Engineering student at UIUC. Projects in digital design, MATLAB, and SystemVerilog.">
+  <!-- <meta property="og:image" content="https://rtalusan13.github.io/assets/images/portrait.jpg"> -->
+
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/carousel.css">
+  <script src="js/layout.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/carousel.js" defer></script>
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <main>
+
+    <!-- ===================== 1. HERO ===================== -->
+    <section class="hero" aria-labelledby="hero-name">
+      <figure class="hero-photo reveal" style="--delay: .1s">
+        <!-- 800×1000 JPG, under ~200 KB -->
+        <img src="assets/images/portrait.jpg" width="800" height="1000"
+             alt="Portrait of Raphael Talusan" fetchpriority="high">
+      </figure>
+
+      <div class="hero-text reveal">
+        <p class="eyebrow"><span>Computer Engineering student at <img class="inline-logo" src="assets/logos/uiuc-block-i.svg" alt="UIUC"></span></p>
+        <h1 class="hero-name" id="hero-name">Raphael Talusan</h1>
+        <p class="hero-pitch">
+          I [design / build / study] [what you work on], from [one end] to [the other].
+          Currently focused on [area], and looking for [internships / roles] in [field].
+        </p>
+        <div class="hero-actions">
+          <a href="projects.html" class="btn btn-lg">View projects</a>
+          <a href="resume.html" class="btn btn-lg btn-outline">Resume</a>
+        </div>
+        <ul class="social">
+          <li><a href="https://github.com/rtalusan13">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/raphael-talusan">LinkedIn</a></li>
+          <li><a href="mailto:rtalu@illinois.edu">Email</a></li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- ===================== 2. FEATURED PROJECTS =====================
+         One <article> per project. To add one, copy a whole
+         <article> ... </article> block and change its text.
+         - class="project-card featured" on the FIRST card only: it gets the wide layout.
+         - Image: 1200×750 (16:10) in assets/images/.
+         - Link: points at that project's section on projects.html. -->
+    <section class="section" aria-labelledby="featured-title">
+      <div class="section-head">
+        <h2 class="h2" id="featured-title">Featured projects</h2>
+        <a href="projects.html" class="link-arrow">All projects <span aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <div class="project-grid reveal">
+
+        <!-- Project 1 (featured) -->
+        <article class="project-card featured">
+          <div class="project-media">
+            <img src="assets/images/project-1.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <span class="project-kicker">Featured</span>
+            <h3><a href="projects.html#project-1">[Project name]</a></h3>
+            <p>[What it is, what you built, and one concrete result. A number beats an adjective: "runs at 100 MHz on an Artix-7" says more than "fast".]</p>
+            <ul class="tags"><li>SystemVerilog</li><li>FPGA</li></ul>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card">
+          <div class="project-media">
+            <img src="assets/images/project-2.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <h3><a href="projects.html#project-2">[Project name]</a></h3>
+            <p>[One or two sentences with a concrete result.]</p>
+            <ul class="tags"><li>MATLAB</li><li>DSP</li></ul>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card">
+          <div class="project-media">
+            <img src="assets/images/project-3.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
+          </div>
+          <div class="project-body">
+            <h3><a href="projects.html#project-3">[Project name]</a></h3>
+            <p>[One or two sentences with a concrete result.]</p>
+            <ul class="tags"><li>Python</li></ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!-- ===================== 3. ABOUT ===================== -->
+    <section class="section about" aria-labelledby="about-title">
+
+      <div class="about-text reveal">
+        <h2 class="h2" id="about-title">About me</h2>
+        <p>Got into a computers because I grew up a gamer, stayed with computers because I am a problem solver.</p>
+        <p>I'm currently a part of a Co-Op program (at UIUC) under Raytheon's Systems Engineering team. I've also previously taken part in software research and engineering and hardware projects.</p>
+      </div>
+
+      <!-- Photo carousel. One <img> per photo, in the order shown.
+             src        = file in image_carousel/ (about 1600 px wide, under ~500 KB)
+             data-title = caption under the photo
+             alt        = what the photo shows, for screen readers
+           data-variant="single" shows one photo at a time; remove it for the
+           blurred "focus" style. data-autoplay = ms per photo (0 = off). -->
+      <div class="fp-root about-carousel reveal" data-carousel data-variant="single" data-autoplay="5000" aria-label="Photos">
+        <template>
+          <img src="image_carousel/pc-build-parts.jpg" data-title="Building my new PC"
+               alt="PC components still in their packaging, laid out on a table">
+          <img src="image_carousel/pc-test-bench.jpg" data-title="First boot on the test bench"
+               alt="The assembled PC running outside its case, sitting on the motherboard box">
+        </template>
+      </div>
+
+      <dl class="facts reveal" style="--delay: .1s">
+        <dt>Studying</dt>  <dd>Computer Engineering (Stats Minor) | UIUC | 2028</dd>
+        <dt>Focus</dt>     <dd>Digital Design &amp; Hardware Verification</dd>
+        <dt>Currently</dt> <dd>Learning operating systems programming and working as a Systems Engineering Co-Op</dd>
+        <dt>Seeking</dt>   <dd>Summer 2027 internships in Digital Design, FPGA Development, or Design Verification</dd>
+      </dl>
+
+    </section>
+
+
+    <!-- ===================== 4. CLOSING CTA ===================== -->
+    <section class="section cta-band reveal" aria-labelledby="cta-title">
+      <h2 class="h2" id="cta-title">Let's work together</h2>
+      <p>rtalu [at] illinois [dot] edu</p>
+      <a href="contact.html" class="btn btn-lg">Contact Me</a>
+    </section>
+
+  </main>
+
+  <site-footer></site-footer>
+
+</body>
+</html>

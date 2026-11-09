@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  JOURNAL ENTRY PAGE: shows one Markdown file from journals/.
+  Address: journal-entry.html?p=hello-world  ->  journals/hello-world.md
+  There's nothing to edit here; write entries in journals/ instead.
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Journal | Raphael Talusan</title>
+  <meta name="description" content="A journal entry by Raphael Talusan.">
+  <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
+
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/journal.css">
+  <script src="js/layout.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/vendor/marked.umd.js" defer></script>
+  <script src="js/journal.js" defer></script>
+</head>
+<!-- data-nav: underline "Journal" in the nav bar while reading an entry -->
+<body data-nav="journal.html">
+
+  <site-header></site-header>
+
+  <main>
+    <article class="entry" data-journal-entry>
+      <a class="entry-back" href="journal.html"><span aria-hidden="true">&larr;</span> Journal</a>
+    </article>
+  </main>
+
+  <site-footer></site-footer>
+
+</body>
+</html>

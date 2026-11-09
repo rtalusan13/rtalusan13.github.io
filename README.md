@@ -2,6 +2,7 @@
 - redo favicon with transparent background
 - change color scheme
 - create all different pages
+- need block i icon
 
 - https://rtalusan13.github.io/index.html
 

@@ -130,7 +130,13 @@ FPGA development (Urbana board, MicroBlaze SoC), LabVIEW, [more tools]
 ## Awards
 logo: none
 
-- [Award name, year]
+- **James Scholar [3.50+ GPA]** (Sep 2025)
+- **Dean's List [4.0/4.0 GPA]** (July 2025)
+- **Illinois State Scholar** (May 2024)
+- **National Merit Scholarship Commendation** (Nov 2023)
+- **AP Scholar** (June 2023) | College Board
+- **(2) Bronze Proficiency Award** (May 2022 & 2023) | National German Exam Board ~ Danke Frau Michalak! 🕊️
+- **State Runner-Up (Apr 2021)** | ICTM Math Competition
 
 ## Certifications
 logo: none

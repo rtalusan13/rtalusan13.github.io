@@ -59,17 +59,35 @@ open: yes
 
 ## Raytheon
 role: Systems Engineering Co-Op
-dates: [Start month year] – Present
-location: [City, ST]
+dates: Aug 2026 – Present
+location: Remote
 current: yes
 
 - [What you work on, with one concrete result]
 - [Second bullet]
 
-## [Research lab or group]
-role: [Undergraduate Researcher]
-dates: [Start] – [End]
-location: Urbana-Champaign, IL
+## University of Illinois Urbana-Champaign
+role: Undergraduate Teaching Assistant
+dates: Aug 2025 – Present
+location: Champaign, IL
+current: yes
+
+- [What you work on, with one concrete result]
+- [Second bullet]
+
+## Raytheon
+role: Systems Engineering Intern
+dates: May 2026 – Aug 2026
+location: Indianapolis, IN
+current: no
+
+- [What you work on, with one concrete result]
+- [Second bullet]
+
+## Gritton Lab - UIUC
+role: Software Research Assistant
+dates: Dec 2025 – Sep 2026
+location: Champaign, IL
 tags: MATLAB, LabVIEW
 
 - Designed a MATLAB pipeline to process LabVIEW data, automating response-latency and accuracy analysis for 16 subjects

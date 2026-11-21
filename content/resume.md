@@ -46,13 +46,14 @@ current: yes
 open: yes
 
 - GPA: 3.8 / 4.0
-- [Honors, scholarships, or Dean's List]
+- Dean's List + James Scholar (Honors)
 
 ### Relevant coursework
 - ECE 425 | Introduction to VLSI System Design | planned | CMOS logic, Transistor-level layout, Timing analysis
 - ECE 411 | Computer Organization and Design | planned | SystemVerilog, Pipelined RISC-V CPU, Caches, Branch prediction
 - ECE 391 | Computer Systems Engineering | in progress | C, Assembly, OS kernels, Interrupts, Virtual memory
 - ECE 385 | Digital Systems Laboratory | completed | SystemVerilog, FPGA design, MicroBlaze SoC, C
+- ECE 342 | Electronic Circuits | in progress | Circuit Analysis, Transistors
 
 
 # Work Experience | Work
@@ -69,6 +70,7 @@ current: yes
 ## University of Illinois Urbana-Champaign
 role: Undergraduate Teaching Assistant
 dates: Aug 2025 – Present
+logo: assets/logos/uiuc-block-i.png
 location: Champaign, IL
 current: yes
 
@@ -87,6 +89,7 @@ current: no
 ## Gritton Lab - UIUC
 role: Software Research Assistant
 dates: Dec 2025 – Sep 2026
+logo: assets/logos/uiuc-block-i.png
 location: Champaign, IL
 tags: MATLAB, LabVIEW
 

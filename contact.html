@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  CONTACT PAGE
+  The cards come from SITE in js/layout.js (email + links), so they always
+  match the footer and the home page.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +14,6 @@
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Using a carousel on this page? Also add:
-       <link rel="stylesheet" href="css/carousel.css">
-       <script src="js/carousel.js" defer></script> -->
   <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
 </head>
@@ -19,15 +21,15 @@
 
   <site-header></site-header>
 
-  <main>
+  <main id="main">
     <header class="page-head reveal">
       <h1 class="page-title">Contact</h1>
-      <p class="lede">Coming soon.</p>
+      <p class="lede">Email is the fastest way to reach me. I'm looking for summer internships and fall/spring co-ops in hardware engineering.</p>
     </header>
 
-    <!-- Page content goes here. Wrap each part in
-         <section class="section"> ... </section> for consistent spacing. -->
-
+    <section class="reveal" aria-label="Ways to reach me">
+      <site-links variant="cards"></site-links>
+    </section>
   </main>
 
   <site-footer></site-footer>

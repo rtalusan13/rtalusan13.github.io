@@ -1,0 +1,5 @@
+# macOS Finder metadata
+.DS_Store
+
+# Python cache (from dev/check.py)
+__pycache__/

@@ -1,42 +1,49 @@
 // =========================================================
-// SHARED LAYOUT: the nav bar and footer for every page.
+// SITE SETTINGS + SHARED LAYOUT (loaded in <head> on every page, not deferred)
 //
-// Pages load this file in <head> (not deferred), then write
-//   <site-header></site-header>   where the nav bar goes
-//   <site-footer></site-footer>   where the footer goes
-// and this script fills them in while the page loads, so
-// there's no flicker.
+// Edit SITE below to change your name, email, links or nav once for the
+// whole site. Pages then use these tags, which this file fills in:
 //
-// Pages inside a subfolder (e.g. tools/) add root="../":
-//   <site-header root="../"></site-header>
+//   <site-header></site-header>              nav bar (+ "skip to content" link)
+//   <site-footer></site-footer>              footer
+//   <site-links></site-links>                GitHub / LinkedIn / Email as a row of links
+//   <site-links variant="cards"></site-links>   the same as large cards (Contact page)
+//   <site-email></site-email>                your email as a clickable link
 //
-// EDIT HERE:
-//   NAV_LINKS  pages in the nav bar (order = left to right)
-//   CTA        the black button on the right
-//   SOCIAL     links in the footer
+// Pages inside a subfolder add root="../" to <site-header>; the 404 page uses root="/".
 // =========================================================
 (function () {
-  const NAME = "Raphael Talusan";
+  const SITE = {
+    name: "Raphael Talusan",
+    email: "rtalu@illinois.edu",
 
-  const NAV_LINKS = [
-    { label: "Home",     href: "index.html" },
-    { label: "Resume",   href: "resume.html" },
-    { label: "Projects", href: "projects.html" },
-    { label: "Journal",  href: "journal.html" },
-  ];
+    // Order here = order everywhere (hero, footer, Contact page).
+    links: [
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/raphael-talusan", handle: "linkedin.com/in/raphael-talusan" },
+      { label: "GitHub",   href: "https://github.com/rtalusan13",               handle: "github.com/rtalusan13" },
+    ],
 
-  const CTA = { label: "Contact Me", href: "contact.html" };
+    // Pages in the nav bar, left to right.
+    nav: [
+      { label: "Home",     href: "index.html" },
+      { label: "Resume",   href: "resume.html" },
+      { label: "Projects", href: "projects.html" },
+      { label: "Journal",  href: "journal.html" },
+    ],
 
-  const SOCIAL = [
-    { label: "GitHub",   href: "https://github.com/rtalusan13" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/YOUR-PROFILE" },
-  ];
+    // The button on the right of the nav bar.
+    cta: { label: "Contact Me", href: "contact.html" },
+  };
 
   /* ---------- Nothing below needs editing for routine changes ---------- */
 
-  const isExternal = href => /^(https?:|mailto:)/.test(href);
+  window.SITE = SITE;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const isExternal = href => /^([a-z][a-z0-9+.-]*:|\/)/i.test(href);
   const url = (root, href) => (isExternal(href) ? href : root + href);
-  const links = root => NAV_LINKS.map(l => '<li><a href="' + url(root, l.href) + '">' + l.label + "</a></li>").join("");
+  const navItems = root => SITE.nav.map(l => '<li><a href="' + esc(url(root, l.href)) + '">' + esc(l.label) + "</a></li>").join("");
+  const allLinks = () => SITE.links.concat(SITE.email ? [{ label: "Email", href: "mailto:" + SITE.email, handle: SITE.email }] : []);
+  const ext = href => (/^https?:/i.test(href) ? ' target="_blank" rel="noopener"' : "");
 
   const ICON_MENU =
     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
@@ -49,20 +56,23 @@
     '<circle cx="16" cy="16" r="16" fill="url(#logo-grad)"/><defs>' +
     '<linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">' +
     '<stop stop-color="#FF9966"/><stop offset="1" stop-color="#FF5E62"/></linearGradient></defs></svg>';
+  const ICON_ARROW = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   function header(root) {
+    const cta = '<a href="' + esc(url(root, SITE.cta.href)) + '" class="btn">' + esc(SITE.cta.label) + "</a>";
     return (
+      '<a class="skip-link" href="#main">Skip to content</a>' +
       '<header class="nav-wrap">' +
         '<div class="nav-bar">' +
-          '<a href="' + root + 'index.html" class="logo" aria-label="Home">' + LOGO + "</a>" +
-          '<nav aria-label="Main"><ul class="nav-links">' + links(root) + "</ul></nav>" +
-          '<div class="cta-desktop"><a href="' + url(root, CTA.href) + '" class="btn">' + CTA.label + "</a></div>" +
+          '<a href="' + esc(url(root, "index.html")) + '" class="logo" aria-label="Home">' + LOGO + "</a>" +
+          '<nav aria-label="Main"><ul class="nav-links">' + navItems(root) + "</ul></nav>" +
+          '<div class="cta-desktop">' + cta + "</div>" +
           '<button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">' + ICON_MENU + "</button>" +
         "</div>" +
         '<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">' +
           '<button class="close-btn" type="button" aria-label="Close menu">' + ICON_CLOSE + "</button>" +
-          '<nav aria-label="Mobile"><ul class="mobile-links">' + links(root) + "</ul></nav>" +
-          '<div class="mobile-cta"><a href="' + url(root, CTA.href) + '" class="btn">' + CTA.label + "</a></div>" +
+          '<nav aria-label="Mobile"><ul class="mobile-links">' + navItems(root) + "</ul></nav>" +
+          '<div class="mobile-cta">' + cta + "</div>" +
         "</div>" +
       "</header>"
     );
@@ -71,18 +81,38 @@
   function footer() {
     return (
       '<footer class="site-footer">' +
-        "<span>&copy; " + new Date().getFullYear() + " " + NAME + "</span>" +
-        "<ul>" + SOCIAL.map(s => '<li><a href="' + s.href + '">' + s.label + "</a></li>").join("") + "</ul>" +
+        "<span>&copy; " + new Date().getFullYear() + " " + esc(SITE.name) + "</span>" +
+        "<ul>" + allLinks().map(s => '<li><a href="' + esc(s.href) + '"' + ext(s.href) + ">" + esc(s.label) + "</a></li>").join("") + "</ul>" +
       "</footer>"
     );
   }
 
-  customElements.define("site-header", class extends HTMLElement {
-    connectedCallback() { if (!this.firstChild) this.innerHTML = header(this.getAttribute("root") || ""); }
-  });
-  customElements.define("site-footer", class extends HTMLElement {
-    connectedCallback() { if (!this.firstChild) this.innerHTML = footer(); }
-  });
+  function linkRow() {
+    return '<ul class="social">' + allLinks().map(s => '<li><a href="' + esc(s.href) + '"' + ext(s.href) + ">" + esc(s.label) + "</a></li>").join("") + "</ul>";
+  }
+
+  function linkCards() {
+    // Email first on the Contact page: it's the main way to reach you.
+    const items = allLinks();
+    items.sort((a, b) => (b.label === "Email") - (a.label === "Email"));
+    return '<div class="contact-grid">' + items.map(s =>
+      '<a class="contact-card" href="' + esc(s.href) + '"' + ext(s.href) + ">" +
+        '<span class="contact-label">' + esc(s.label) + "</span>" +
+        '<span class="contact-value">' + esc(s.handle || s.href) + "</span>" +
+        '<span class="contact-arrow">' + ICON_ARROW + "</span>" +
+      "</a>").join("") + "</div>";
+  }
+
+  const define = (name, render) => {
+    if (customElements.get(name)) return;
+    customElements.define(name, class extends HTMLElement {
+      connectedCallback() { if (!this.dataset.ready) { this.dataset.ready = "1"; this.innerHTML = render(this); } }
+    });
+  };
+  define("site-header", el => header(el.getAttribute("root") || ""));
+  define("site-footer", () => footer());
+  define("site-links", el => (el.getAttribute("variant") === "cards" ? linkCards() : linkRow()));
+  define("site-email", () => '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + "</a>");
 
   // Inline logos (<img class="inline-logo">): if the image file is missing,
   // show its alt text instead of a broken-image icon. Runs this early so it

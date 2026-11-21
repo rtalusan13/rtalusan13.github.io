@@ -39,7 +39,9 @@
 
 .journal-item:hover .journal-title a { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
 .journal-item:hover .journal-read span { transform: translateX(3px); }
-.journal-item:has(a:focus-visible) { outline: 2px solid var(--text); outline-offset: 6px; border-radius: 6px; }
+.journal-item:focus-within { outline: 2px solid var(--link); outline-offset: 6px; border-radius: 6px; }   /* fallback: no :has() */
+.journal-item:has(a:focus-visible) { outline: 2px solid var(--link); outline-offset: 6px; border-radius: 6px; }
+.journal-item:focus-within:not(:has(a:focus-visible)) { outline: none; }
 
 .journal-status { padding: 28px 0; color: var(--muted); }
 
@@ -58,25 +60,4 @@
 .entry-meta > div { display: flex; align-items: baseline; gap: 8px; }
 .entry-meta dd { margin: 0; font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-/* Article text rendered from Markdown */
-.prose { max-width: 68ch; font-size: 1.0625rem; line-height: 1.75; }
-.prose > * + * { margin-top: 1.15em; }
-.prose h2 { margin-top: 2em; font-size: 1.5rem; letter-spacing: -0.02em; }
-.prose h3 { margin-top: 1.7em; font-size: 1.2rem; }
-.prose h2, .prose h3 { scroll-margin-top: 24px; }
-.prose h2 + *, .prose h3 + * { margin-top: 0.6em; }
-.prose a { text-decoration: underline; text-decoration-color: #9ca3af; text-underline-offset: 3px; }
-.prose a:hover { text-decoration-color: currentColor; }
-.prose ul, .prose ol { padding-left: 1.4em; }
-.prose li + li { margin-top: 0.35em; }
-.prose blockquote { margin-inline: 0; padding-left: 1em; border-left: 3px solid var(--line); color: var(--muted); }
-.prose code { padding: 0.1em 0.35em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
-.prose pre { overflow-x: auto; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; line-height: 1.55; }
-.prose pre code { padding: 0; font-size: 0.875rem; background: none; border: 0; }
-.prose img { display: block; margin-inline: auto; border-radius: 14px; }
-.prose figure { margin: 2em 0; }
-.prose figcaption { margin-top: 10px; font-size: 0.875rem; color: var(--faint); text-align: center; }
-.prose hr { margin: 2.5em 0; border: 0; border-top: 1px solid var(--line); }
-.prose table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; }
-.prose th, .prose td { padding: 8px 14px; border-bottom: 1px solid var(--line); text-align: left; }
-.prose th { font-weight: 600; }
+/* Article text styles (.prose) live in css/style.css, section 12. */

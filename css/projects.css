@@ -1,0 +1,40 @@
+/* =========================================================
+   PROJECTS PAGE  (pairs with js/projects.js; content in content/projects.md)
+     A. Quick links to each project
+     B. One project: image + details, then the write-up
+   (Home page project cards are styled in css/style.css, section 7.)
+   ========================================================= */
+
+/* ---------- A. Quick links ---------- */
+.pj-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: -8px 0 clamp(32px, 6vw, 48px); }
+.pj-jump a {
+  padding: 6px 14px;
+  border: 1px solid var(--primary-line);
+  border-radius: 9999px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.pj-jump a:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+
+/* ---------- B. One project ---------- */
+.pj { padding: clamp(28px, 5vw, 44px) 0; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.pj:first-of-type { border-top: 0; padding-top: 0; }
+.pj.is-target .pj-title { text-decoration: underline; text-decoration-color: var(--coral); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+.pj-top { display: grid; gap: 22px; align-items: center; }
+.pj-media { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); aspect-ratio: 16 / 10; }
+.pj-media img { width: 100%; height: 100%; object-fit: cover; }
+.pj-info { display: grid; gap: 12px; justify-items: start; }
+.pj-title { font-size: clamp(1.5rem, 3.4vw, 2rem); letter-spacing: -0.02em; }
+.pj-summary { color: var(--muted); font-size: 1.0625rem; max-width: 60ch; }
+.pj-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.pj-body { margin-top: clamp(22px, 4vw, 32px); }
+
+@media (min-width: 768px) {
+  .pj-top { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(28px, 4vw, 48px); }
+  .pj-top.no-media { grid-template-columns: minmax(0, 1fr); }
+}

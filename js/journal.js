@@ -15,45 +15,25 @@
 // journal.html            lists which files to show (newest first on the page)
 // journal-entry.html?p=X  shows journals/X.md as a readable page
 //
-// Needs js/vendor/marked.umd.js (the Markdown converter) on the entry page.
+// Needs js/content.js first, and js/vendor/marked.umd.js on the entry page.
 // =========================================================
 (function () {
   const FOLDER = "journals/";
   const READER = "journal-entry.html";
   const NAME_OK = /^[a-z0-9][a-z0-9_-]*$/i;           // allowed file names (no paths)
 
-  /* ---------- Reading a file ---------- */
-
-  // Split "---\nkey: value\n---\nbody" into { meta, body }.
-  function splitHeader(text) {
-    const m = text.replace(/^﻿/, "").match(/^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)([\s\S]*)$/);
-    if (!m) return { meta: {}, body: text };
-    const meta = {};
-    m[1].split(/\r?\n/).forEach(line => {
-      const kv = line.match(/^\s*([A-Za-z][\w-]*)\s*:\s*(.*?)\s*$/);
-      if (kv) meta[kv[1].toLowerCase()] = kv[2].replace(/^(["'])(.*)\1$/, "$2");
-    });
-    return { meta, body: m[2] };
-  }
-
-  // "2026-10-19" -> a date pinned to UTC, so no time zone can shift the day.
-  function parseDate(s) {
-    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(s || "").trim());
-    return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])) : null;
-  }
-  const pretty = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  const C = window.Content;
+  if (!C) return;
 
   async function loadEntry(name) {
-    const res = await fetch(FOLDER + name + ".md", { cache: "no-cache" });
-    if (!res.ok) throw new Error(FOLDER + name + ".md: HTTP " + res.status);
-    const { meta, body } = splitHeader(await res.text());
+    const { meta, body } = C.frontMatter(await C.load(FOLDER + name + ".md"));
     return {
       name,
       body,
       title: meta.title || name.replace(/[-_]+/g, " "),
       caption: meta.caption || "",
-      published: parseDate(meta.published),
-      updated: parseDate(meta.updated),
+      published: C.date(meta.published),
+      updated: C.date(meta.updated),
     };
   }
 
@@ -71,8 +51,8 @@
     const dl = el("dl", className);
     const add = (label, d) => {
       const row = el("div");
-      const t = el("time", "", pretty.format(d));
-      t.dateTime = d.toISOString().slice(0, 10);
+      const t = el("time", "", C.formatDate(d));
+      t.dateTime = C.isoDate(d);
       const dd = el("dd");
       dd.append(t);
       row.append(el("dt", "", label), dd);
@@ -83,15 +63,7 @@
     return dl;
   }
 
-  function showProblem(container, message) {
-    const p = el("p", "journal-status", message);
-    if (location.protocol === "file:") {
-      p.textContent = "Journal entries can't load from a file opened directly. " +
-        "Preview the site through a local server instead (see README.md).";
-    }
-    container.append(p);
-    return p;
-  }
+  const showProblem = (container, message) => C.problem(container, message, "journal-status");
 
   /* ---------- journal.html: the list ---------- */
 
@@ -212,17 +184,13 @@
     head.append(dateList("entry-meta", e.published, e.updated));
 
     const article = el("div", "prose");
-    if (window.marked && typeof window.marked.parse === "function") {
-      article.innerHTML = window.marked.parse(e.body);
-    } else {
-      article.append(el("pre", "", e.body));            // converter missing: show plain text
-    }
+    article.innerHTML = C.markdown(e.body);
     fixLinks(article);
     makeFigures(article);
     addHeadingIds(article);
 
     root.append(head, article);
-    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
   }
 
   /* ---------- Start ---------- */

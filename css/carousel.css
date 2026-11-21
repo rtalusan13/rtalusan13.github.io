@@ -119,3 +119,8 @@
 }
 
 @keyframes fp-in { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* fallback: browsers without container queries show one photo at a time */
+@supports not (container-type: inline-size) {
+  .fp-root { --fp-w: 100%; --fp-edge: 0px; }
+}

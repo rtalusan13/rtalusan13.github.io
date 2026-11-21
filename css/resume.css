@@ -1,0 +1,388 @@
+/* =========================================================
+   RESUME PAGE  (pairs with js/resume.js; content in content/resume.md)
+     A. Head: title + PDF button
+     B. Section bar (liquid glass, drag to choose)
+     C. Sliding panels
+     D. Rows (dropdowns)
+     E. Course bubbles + hover card
+     F. Phones
+   ========================================================= */
+
+.rz { max-width: 60rem; margin-inline: auto; }   /* wide enough for the full section names on laptops */
+:root { --rz-ease: cubic-bezier(0.16, 1, 0.3, 1); --rz-logo: 44px; --rz-gap: 16px; --rz-pad: 10px; }
+
+
+/* ---------- A. Head ---------- */
+.rz-head { padding-top: clamp(4px, 2vw, 16px); text-align: center; }
+.rz-title { margin: 0; font-size: clamp(2.25rem, 6.5vw, 3.25rem); line-height: 1.05; letter-spacing: -0.045em; }
+
+/* Words rise into place one after another */
+.rz-title .w { display: inline-block; }
+.js .rz-title[data-pull-up]:not(.split) { animation: rz-show 0s 1.5s forwards; visibility: hidden; } /* safety: never stays hidden */
+.js .rz-title.split .w { opacity: 0; transform: translateY(0.45em); animation: rz-word 0.7s var(--rz-ease) forwards; animation-delay: calc(var(--i) * 80ms); }
+@keyframes rz-word { to { opacity: 1; transform: none; } }
+@keyframes rz-show { to { visibility: visible; } }
+
+/* PDF button and "Updated" date, side by side; the row disappears until a PDF exists */
+.rz-pdf-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px; margin-top: 14px; }
+.rz-pdf-row:empty { display: none; }
+.rz-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 3px 3px 16px;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: gap 0.35s var(--rz-ease), background-color 0.2s;
+  animation: rz-rise 0.7s var(--rz-ease) 0.3s backwards;
+}
+.rz-pdf:hover { gap: 14px; background: var(--primary-hover); }
+.rz-pdf-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #fff; color: var(--primary); transition: transform 0.35s var(--rz-ease); }
+.rz-pdf:hover .rz-pdf-icon { transform: scale(1.1); }
+.rz-updated { font-size: 0.8125rem; color: var(--faint); animation: rz-rise 0.7s var(--rz-ease) 0.4s backwards; }
+@keyframes rz-rise { from { opacity: 0; transform: translateY(14px); } }
+
+
+/* ---------- B. Section bar (liquid glass) ----------
+   Click a section, or press and drag along the bar: the selection jumps to
+   the next section only once you pass the halfway point between two. */
+.rz-bar-wrap {
+  position: sticky;
+  top: 10px;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(18px, 3.5vw, 28px) 0 6px;
+  animation: rz-rise 0.7s var(--rz-ease) 0.45s backwards;
+}
+.rz-bar {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 5px;
+  overflow-x: auto;
+  border-radius: 9999px;
+  background: var(--glass-bg);                /* glass recipe: css/style.css, section 1 */
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  scrollbar-width: none;
+  touch-action: pan-y;                       /* sideways drags choose sections */
+  -webkit-user-select: none;
+  user-select: none;
+}
+.rz-bar::-webkit-scrollbar { display: none; }
+@media (hover: hover) and (pointer: fine) { .rz-bar { cursor: grab; } }
+.rz-bar.dragging, .rz-bar.dragging .rz-tab { cursor: grabbing; }
+
+.rz-tab {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+  transition: color 0.3s, transform 0.15s;
+}
+.rz-tab:not([aria-selected="true"]):hover { color: var(--text); }   /* only the orange bubble fills a tab */
+.rz-tab:active { transform: scale(0.94); }
+.rz-tab[aria-selected="true"] { color: var(--orange-ink); }
+.rz-tab:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.rz-tab .t-short { display: none; }
+.rz-bar.compact .rz-tab .t-full { display: none; }
+.rz-bar.compact .rz-tab .t-short { display: inline; }
+
+/* The selected-section bubble: light orange glass that slides with a slight
+   overshoot. The outer .rz-bubble only moves between tabs (js sets --x, --w).
+   The inner .rz-blob reaches toward your pointer, left or right (js sets
+   --lean and --stretch), so it reads as something you can grab, and swells
+   while held. Keeping them separate means the blob always stretches around
+   its own center, wherever the tab is. */
+.rz-bubble {
+  position: absolute;
+  z-index: 0;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  width: var(--w, 0);
+  transform: translateX(var(--x, 0));
+  transition: transform 0.55s var(--ease-spring), width 0.55s var(--ease-spring);
+}
+.rz-blob {
+  position: absolute;
+  inset: 0;
+  translate: var(--lean, 0px) 0;
+  scale: calc(var(--hold-x, 1) + var(--stretch, 0)) calc(var(--hold-y, 1) - var(--stretch, 0) * 0.4);
+  border-radius: 9999px;
+  background: var(--orange-soft);             /* fallback for the gradient below */
+  background: linear-gradient(180deg, #fff3ec 0%, var(--orange-soft) 48%, #ffc6aa 100%);
+  box-shadow:
+    0 8px 18px -8px rgb(242 100 63 / 0.55),
+    inset 0 1px 1px rgb(255 255 255 / 0.95),
+    inset 0 -1px 2px rgb(194 65 12 / 0.16),
+    inset 0 0 0 1px rgb(242 100 63 / 0.22);
+  transition: translate 0.6s var(--ease-spring), scale 0.6s var(--ease-spring);
+}
+.rz-blob::after {                            /* glossy highlight across the top */
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 12%;
+  right: 12%;
+  height: 46%;
+  border-radius: 9999px;
+  background: linear-gradient(rgb(255 255 255 / 0.7), rgb(255 255 255 / 0));
+}
+.rz-bar.held .rz-blob { --hold-x: 1.02; --hold-y: 1.1; }     /* swell taller, barely wider */
+.rz-bar.tracking .rz-blob { transition: translate 0.14s ease-out, scale 0.14s ease-out; }  /* follow the pointer closely */
+.rz-bar.dragging .rz-tab:active { transform: none; }          /* the tab you grabbed doesn't stay shrunk */
+
+/* Small round buttons either side of the bar: previous / next (wraps around) */
+.rz-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #374151;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.35s var(--ease-spring), color 0.2s;
+}
+.rz-arrow:hover { color: var(--orange-ink); transform: scale(1.1); }
+.rz-arrow:active { transform: scale(0.9); }
+.rz-arrow:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+
+
+/* ---------- C. Sliding panels ---------- */
+.rz-stage { position: relative; overflow: hidden; overflow: clip; overflow-clip-margin: 8px; touch-action: pan-y; } /* hidden = fallback for clip */
+.rz-panel { outline: none; }
+.rz-intro { margin: 4px 0 2px; color: var(--muted); max-width: 62ch; }
+.rz-enter .rz-entry { animation: rz-rise 0.7s var(--rz-ease) backwards; animation-delay: calc(0.55s + var(--i) * 70ms); }
+.rz-status { padding: 32px 0; color: var(--muted); text-align: center; }
+
+
+/* ---------- D. Rows ---------- */
+.rz-list { margin: 0; padding: 0; list-style: none; }
+.rz-entry { border-bottom: 1px solid var(--line); }
+.rz-entry h3 { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit; }
+
+.rz-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--rz-gap);
+  width: 100%;
+  padding: 14px var(--rz-pad);
+  border-radius: 14px;
+  text-align: left;
+}
+.rz-entry.no-logo .rz-row { grid-template-columns: minmax(0, 1fr) auto; }
+button.rz-row { cursor: pointer; transition: background-color 0.2s; }
+button.rz-row:hover { background: var(--surface); background: color-mix(in srgb, var(--primary-soft) 55%, transparent); }
+button.rz-row:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+
+/* Logo slot (LinkedIn style): image, or initials when there's no image */
+.rz-logo {
+  display: grid;
+  place-items: center;
+  width: var(--rz-logo);
+  height: var(--rz-logo);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.rz-logo img { width: 100%; height: 100%; object-fit: contain; }
+.rz-logo.mono { background: var(--surface); color: var(--muted); font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.02em; }
+
+.rz-main { display: grid; gap: 2px; min-width: 0; }
+.rz-name { font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.01em; color: var(--text); }
+.rz-sub { font-size: 0.9375rem; color: var(--muted); }
+.rz-meta-m { display: none; }                         /* phone-only copy of dates + badge */
+
+/* Right edge: dates, "Current", chevron */
+.rz-side { display: flex; align-items: center; gap: 12px; }
+.rz-dates { font-size: 0.875rem; color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rz-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border: 1px solid #a7f3d0;
+  border-radius: 9999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rz-now i { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #10b981; }
+.rz-now i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #10b981; animation: rz-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes rz-ping { 75%, 100% { transform: scale(2.6); opacity: 0; } }
+
+.rz-chev { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: var(--muted); transition: transform 0.4s var(--rz-ease), background-color 0.2s, color 0.2s; }
+button.rz-row:hover .rz-chev { background: #fff; color: var(--text); }
+.rz-entry.open .rz-chev { transform: rotate(180deg); }
+
+/* Dropdown body: animates open and closed */
+.rz-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s var(--rz-ease); }
+.rz-entry.open .rz-collapse { grid-template-rows: 1fr; }
+.rz-collapse > div { min-height: 0; overflow: hidden; }
+/* Closed rows can't be tabbed into, even in browsers without the inert attribute */
+.rz-entry:not(.open) .rz-collapse > div { visibility: hidden; transition: visibility 0s 0.45s; }
+.rz-content {
+  padding: 0 var(--rz-pad) 16px calc(var(--rz-pad) + var(--rz-logo) + var(--rz-gap));
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.3s, transform 0.45s var(--rz-ease);
+}
+.rz-entry.no-logo .rz-content { padding-left: var(--rz-pad); }
+.rz-entry.open .rz-content { opacity: 1; transform: none; transition-delay: 0.08s; }
+.rz-content > * { max-width: 70ch; }               /* comfortable line length */
+.rz-content > * + * { margin-top: 0.8em; }
+.rz-content ul, .rz-content ol { margin: 0; padding-left: 1.2em; }
+.rz-content li + li { margin-top: 0.4em; }
+.rz-content a { text-decoration: underline; text-underline-offset: 3px; }
+.rz-content .tags { margin-top: 14px; }
+
+
+/* ---------- E. Course bubbles + hover card ----------
+   Colors per status (data-status on the bubble, key and card):
+     done = completed (green), now = in progress (yellow), next = planned/future coursework (gray) */
+[data-status="done"] { --c-top: #f6fdf8; --c-bg: #e3f7ea; --c-bg2: #c8eed5; --c-line: #8fd9a8; --c-ink: #166534; --c-dot: #22c55e; --c-glow: 34 197 94; }
+[data-status="now"]  { --c-top: #fffdf2; --c-bg: #fff6cc; --c-bg2: #ffe9a1; --c-line: #efcd5c; --c-ink: #854d0e; --c-dot: #eab308; --c-glow: 234 179 8; }
+[data-status="next"] { --c-top: #fbfbfc; --c-bg: #eef0f4; --c-bg2: #e1e5ec; --c-line: #d3d9e2; --c-ink: #4b5563; --c-dot: #9ca3af; --c-glow: 100 116 139; }
+
+.rz-courses { margin-top: 1.1em; }
+.rz-courses-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.rz-courses-title { margin: 0; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.rz-content .rz-key { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; padding: 0; list-style: none; font-size: 0.75rem; color: var(--faint); }
+.rz-content .rz-key li { display: inline-flex; align-items: center; gap: 5px; margin: 0; }
+.rz-key li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c-dot); }
+
+.rz-content .rz-course-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 10px 0 4px; list-style: none; }
+.rz-content .rz-course-list li { margin: 0; }
+.rz-course {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px 6px 10px;
+  border: 1px solid var(--c-line);
+  border-radius: 9999px;
+  background: var(--c-bg);                     /* fallback for the gradient */
+  background: linear-gradient(180deg, var(--c-top) 0%, var(--c-bg) 55%, var(--c-bg2) 100%);
+  color: var(--c-ink);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: default;
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.9), 0 1px 2px rgb(15 23 42 / 0.06);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.25s;
+}
+.rz-course::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--c-dot); }
+.rz-course.is-tipped,
+.rz-course:focus-visible {                     /* pops out while its card is showing */
+  position: relative;
+  z-index: 1;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.9), 0 10px 18px -8px rgb(var(--c-glow) / 0.55);
+}
+.rz-course:active { transform: translateY(-1px) scale(1.04); }
+.rz-course:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 9999px; }
+
+/* The card (one for the page, placed by js/resume.js next to the bubble) */
+.rz-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;                                 /* above the section bar and the edge blur */
+  width: max-content;
+  max-width: min(300px, calc(100vw - 16px));
+  padding: 11px 14px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 18px 40px -16px rgb(15 23 42 / 0.32), 0 2px 6px rgb(15 23 42 / 0.06);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(5px) scale(0.97);
+  transform-origin: var(--ax, 50%) 100%;
+  transition: opacity 0.15s, transform 0.25s var(--ease-out), visibility 0s 0.25s;
+}
+.rz-tip[data-side="below"] { transform: translateY(-5px) scale(0.97); transform-origin: var(--ax, 50%) 0; }
+.rz-tip.show { opacity: 1; visibility: visible; transform: none; transition: opacity 0.15s, transform 0.25s var(--ease-out), visibility 0s; }
+.rz-tip-arrow {                                /* little pointer toward the bubble */
+  position: absolute;
+  left: var(--ax, 50%);
+  bottom: -6px;
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-width: 0 1px 1px 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+.rz-tip[data-side="below"] .rz-tip-arrow { top: -6px; bottom: auto; border-width: 1px 0 0 1px; }
+.rz-tip-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 3px; }
+.rz-tip-code { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+.rz-tip-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px 1px 7px;
+  border: 1px solid var(--c-line);
+  border-radius: 9999px;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.rz-tip-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c-dot); }
+.rz-tip-title { font-size: 0.9375rem; font-weight: 650; line-height: 1.3; letter-spacing: -0.005em; }
+.rz-tip-skills { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0 0; padding: 0; list-style: none; }
+.rz-tip-skills li { padding: 1px 8px; border: 1px solid var(--line); border-radius: 9999px; background: var(--surface); color: var(--muted); font-size: 0.75rem; }
+
+
+/* ---------- F. Phones ---------- */
+@media (max-width: 600px) {
+  :root { --rz-logo: 40px; --rz-gap: 12px; --rz-pad: 4px; }
+  .rz-row { align-items: start; padding-block: 13px; }
+  .rz-logo { border-radius: 10px; }
+  .rz-side .rz-dates,
+  .rz-side .rz-now { display: none; }
+  .rz-meta-m { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 4px; }
+  .rz-chev { margin-top: 4px; }
+  .rz-bar { gap: 0; padding: 4px; }
+  .rz-arrow { display: none; }
+  .rz-bubble { top: 4px; bottom: 4px; }
+  .rz-tab { padding: 9px 13px; font-size: 0.84375rem; }
+}
+@media (max-width: 380px) {
+  .rz-tab { padding-inline: 11px; }   /* small phones: every tab still fits */
+}
+
+/* fallback: no backdrop blur -> solid enough to read over content scrolling underneath */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .rz-bar, .rz-arrow { background: rgb(255 255 255 / 0.94); }
+}

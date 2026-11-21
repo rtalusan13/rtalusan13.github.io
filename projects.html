@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  PROJECTS PAGE
+  Everything here comes from content/projects.md; edit that, not this file.
+  Each project has its own address, e.g. projects.html#aurora-os (the "id:" line).
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projects | Raphael Talusan</title>
-  <meta name="description" content="Projects by Raphael Talusan in digital design, MATLAB, and SystemVerilog.">
+  <meta name="description" content="Projects by Raphael Talusan in digital design, FPGAs, operating systems, and MATLAB.">
   <link rel="icon" href="assets/trans_favicon.png" type="image/png" sizes="32x32">
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Using a carousel on this page? Also add:
-       <link rel="stylesheet" href="css/carousel.css">
-       <script src="js/carousel.js" defer></script> -->
+  <link rel="stylesheet" href="css/projects.css">
   <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
+  <script src="js/vendor/marked.umd.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/projects.js" defer></script>
 </head>
 <body>
 
   <site-header></site-header>
 
-  <main>
+  <main id="main">
     <header class="page-head reveal">
       <h1 class="page-title">Projects</h1>
-      <p class="lede">Coming soon.</p>
+      <p class="lede">Hardware, systems, and tools I've built, from SystemVerilog on FPGAs to operating systems and data pipelines.</p>
     </header>
 
-    <!-- Page content goes here. Wrap each part in
-         <section class="section"> ... </section> for consistent spacing. -->
-
+    <div data-projects="all"></div>
+    <noscript><p class="content-status">This page needs JavaScript to show the projects.</p></noscript>
   </main>
 
   <site-footer></site-footer>

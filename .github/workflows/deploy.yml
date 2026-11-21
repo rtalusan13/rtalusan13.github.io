@@ -1,0 +1,56 @@
+# Publishes the site to GitHub Pages every time main is pushed.
+# There is no build step: the files go live exactly as they are in the repo,
+# so the .md files the pages read are served as plain text.
+#
+# One-time setup on GitHub:
+#   Settings > Pages > Build and deployment > Source: "GitHub Actions"
+#
+# Not published: dev/, README files, _template.html, and hidden files
+# (.git, .github, .gitignore, .DS_Store).
+
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:          # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:                  # one deploy at a time; a newer push waits its turn
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Collect the files the site serves
+        run: |
+          cp -a . "$RUNNER_TEMP/site"
+          cd "$RUNNER_TEMP/site"
+          rm -rf dev _template.html LICENSE
+          find . -mindepth 1 -name '.*' -prune -exec rm -rf {} +
+          find . -type f -name 'README*' -delete
+          # Tag CSS/JS links with this deploy's id (style.css?v=1a2b3c4d), so
+          # returning visitors get the new files right away, never a stale mix.
+          v="${GITHUB_SHA::8}"
+          find . -name '*.html' -exec sed -i -E "s#((src|href)=\"[^\"]+\.(css|js))\"#\1?v=$v\"#g" {} +
+          echo "Publishing $(find . -type f | wc -l) files"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

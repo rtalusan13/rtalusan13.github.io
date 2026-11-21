@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  RESUME PAGE
+  All of the resume text lives in content/resume.md; edit that, not this file.
+  The PDF button appears once assets/resume.pdf exists (path set at the top of resume.md).
+  Link straight to a section with resume.html#work, #leadership, #skills.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,25 +15,26 @@
 
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Using a carousel on this page? Also add:
-       <link rel="stylesheet" href="css/carousel.css">
-       <script src="js/carousel.js" defer></script> -->
+  <link rel="stylesheet" href="css/resume.css">
   <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
+  <script src="js/vendor/marked.umd.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/resume.js" defer></script>
 </head>
 <body>
 
   <site-header></site-header>
 
-  <main>
-    <header class="page-head reveal">
-      <h1 class="page-title">Resume</h1>
-      <p class="lede">Coming soon.</p>
-    </header>
-
-    <!-- Page content goes here. Wrap each part in
-         <section class="section"> ... </section> for consistent spacing. -->
-
+  <main id="main">
+    <div class="rz" data-resume data-src="content/resume.md">
+      <header class="rz-head">
+        <h1 class="rz-title" data-pull-up>My Resume</h1>
+        <div class="rz-pdf-row"></div>
+      </header>
+      <noscript><p class="rz-status">This page needs JavaScript. <a href="assets/resume.pdf">Open the PDF resume</a> instead.</p></noscript>
+      <!-- js/resume.js adds the section bar and the rows here -->
+    </div>
   </main>
 
   <site-footer></site-footer>

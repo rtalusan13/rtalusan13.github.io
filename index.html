@@ -4,12 +4,13 @@
   HOME PAGE
   Sections, top to bottom (search for the ===== banners):
     1. HERO .................. name, one-line pitch, buttons
-    2. FEATURED PROJECTS ..... project cards
-    3. ABOUT ................. about text, photo carousel, quick facts
+    2. ABOUT ................. about text, photo carousel, quick facts
+    3. FEATURED PROJECTS ..... project cards
     4. CLOSING CTA ........... "Let's work together"
 
   Edited somewhere else, once for every page:
-    nav bar + footer ......... js/layout.js
+    name, email, links, nav .. js/layout.js (SITE, at the top)
+    project cards ............ content/projects.md (featured: yes)
     colors, fonts, spacing ... css/style.css (section 1)
   See README.md for step-by-step recipes.
 -->
@@ -32,18 +33,19 @@
   <link rel="stylesheet" href="css/carousel.css">
   <script src="js/layout.js"></script>
   <script src="js/main.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/projects.js" defer></script>
   <script src="js/carousel.js" defer></script>
 </head>
 <body>
 
   <site-header></site-header>
 
-  <main>
+  <main id="main">
 
     <!-- ===================== 1. HERO ===================== -->
     <section class="hero" aria-labelledby="hero-name">
       <figure class="hero-photo reveal" style="--delay: .1s">
-        <!-- 800×1000 JPG, under ~200 KB -->
         <img src="assets/images/portrait.jpg" width="800" height="1000"
              alt="Portrait of Raphael Talusan" fetchpriority="high">
       </figure>
@@ -59,76 +61,18 @@
           <a href="projects.html" class="btn btn-lg">View projects</a>
           <a href="resume.html" class="btn btn-lg btn-outline">Resume</a>
         </div>
-        <ul class="social">
-          <li><a href="https://github.com/rtalusan13">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/raphael-talusan">LinkedIn</a></li>
-          <li><a href="mailto:rtalu@illinois.edu">Email</a></li>
-        </ul>
+        <site-links></site-links>   <!-- LinkedIn / GitHub / Email, set in js/layout.js -->
       </div>
     </section>
 
 
-    <!-- ===================== 2. FEATURED PROJECTS =====================
-         One <article> per project. To add one, copy a whole
-         <article> ... </article> block and change its text.
-         - class="project-card featured" on the FIRST card only: it gets the wide layout.
-         - Image: 1200×750 (16:10) in assets/images/.
-         - Link: points at that project's section on projects.html. -->
-    <section class="section" aria-labelledby="featured-title">
-      <div class="section-head">
-        <h2 class="h2" id="featured-title">My Key Projects</h2>
-        <a href="projects.html" class="link-arrow">All projects <span aria-hidden="true">&rarr;</span></a>
-      </div>
-
-      <div class="project-grid reveal">
-        <article class="project-card featured">
-          <div class="project-media">
-            <img src="assets/images/project-1.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
-          </div>
-          <div class="project-body">
-            <span class="project-kicker">ECE 385</span>
-            <h3><a href="projects.html#project-1">Two-Player Retro Game Suite: Hardware-Accelerated SoC FPGA</a></h3>
-            <!-- How is it hardware-accelerated? What is the SoC and how is it used? What was necessary when developing programs in SystemVerilog?-->
-            <p>Six two-player arcade games on a MicroBlaze SoC, driven by a custom SystemVerilog game engine with single-frame input latency at 60 Hz.</p>
-            <ul class="tags"><li>SystemVerilog</li><li>C</li><li>FPGA</li><li>MicroBlaze</li></ul>
-          </div>
-        </article>
-
-        <!-- Project 2 -->
-        <article class="project-card">
-          <div class="project-media">
-            <img src="assets/images/project-2.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
-          </div>
-          <div class="project-body">
-            <h3><a href="projects.html#project-2">IN PROGRESS - AuroraOS</a></h3>
-            <p>RISC-V OS development for embedded systems, allowing the loading and execution of user applications.</p>
-            <ul class="tags"><li>C</li><li>Assembly</li><li>RISC-V</li></ul>
-          </div>
-        </article>
-
-        <!-- Project 3 -->
-        <article class="project-card">
-          <div class="project-media">
-            <img src="assets/images/project-3.jpg" width="1200" height="750" alt="[Describe what the image shows]" loading="lazy">
-          </div>
-          <div class="project-body">
-            <h3><a href="projects.html#project-3">SoLoGUI</a></h3>
-            <p>[Parses raw LabVIEW data and batch-computes latency and accuracy metrics across 16 subjects, with a benchmarking framework and GUI for SNR threshold testing.</p>
-            <ul class="tags"><li>MATLAB</li></ul>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-
-    <!-- ===================== 3. ABOUT ===================== -->
+    <!-- ===================== 2. ABOUT ===================== -->
     <section class="section about" aria-labelledby="about-title">
 
       <div class="about-text reveal">
         <h2 class="h2" id="about-title">About me</h2>
-        <p>Got into a computers because I grew up a gamer, stayed with computers because I am a problem solver.</p>
-        <p>I'm currently a part of a Co-Op program (at UIUC) under Raytheon's Systems Engineering team. I've also previously taken part in software research and engineering and hardware projects.</p>
+        <p>Got into computers because I grew up a gamer, stayed with computers because I am a problem solver.</p>
+        <p>I'm currently a part of a part-time Co-Op program under Raytheon's Systems Engineering team. I've also previously taken part in software research and engineering and hardware projects.</p>
       </div>
 
       <!-- Photo carousel. One <img> per photo, in the order shown.
@@ -156,10 +100,24 @@
     </section>
 
 
+    <!-- ===================== 3. FEATURED PROJECTS =====================
+         The cards come from content/projects.md: every project marked
+         "featured: yes", in file order (the first gets the wide card). -->
+    <section class="section" aria-labelledby="featured-title">
+      <div class="section-head">
+        <h2 class="h2" id="featured-title">My Key Projects</h2>
+        <a href="projects.html" class="link-arrow">All projects <span aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <div class="project-grid reveal" data-projects="featured" data-limit="3"></div>
+      <noscript><p><a href="projects.html">See all projects</a></p></noscript>
+    </section>
+
+
     <!-- ===================== 4. CLOSING CTA ===================== -->
     <section class="section cta-band reveal" aria-labelledby="cta-title">
       <h2 class="h2" id="cta-title">Let's work together</h2>
-      <p>rtalu [at] illinois [dot] edu</p>
+      <p><site-email></site-email></p>
       <a href="contact.html" class="btn btn-lg">Contact Me</a>
     </section>
 

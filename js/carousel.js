@@ -211,7 +211,8 @@
       lastFrame = performance.now();
       timerRaf = requestAnimationFrame(tick);
     }
-    reduceMotion.addEventListener("change", () => {
+    const onMotionChange = fn => (reduceMotion.addEventListener ? reduceMotion.addEventListener("change", fn) : reduceMotion.addListener(fn));
+    onMotionChange(() => {
       startTimer();
       setBar(autoplayOn() ? progress : (active + 1) / n);
     });

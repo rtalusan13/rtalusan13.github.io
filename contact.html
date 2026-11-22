@@ -2,8 +2,8 @@
 <html lang="en">
 <!--
   CONTACT PAGE
-  The cards come from SITE in js/layout.js (email + links), so they always
-  match the footer and the home page.
+  The list comes from SITE in js/layout.js (email + links), so it always
+  matches the footer and the home page.
 -->
 <head>
   <meta charset="UTF-8">
@@ -22,14 +22,16 @@
   <site-header></site-header>
 
   <main id="main">
+    <div class="contact-page">   <!-- one centered column: heading, intro, list -->
     <header class="page-head reveal">
       <h1 class="page-title">Contact</h1>
       <p class="lede">Email is the fastest way to reach me. I'm looking for summer internships and fall/spring co-ops in hardware engineering.</p>
     </header>
 
     <section class="reveal" aria-label="Ways to reach me">
-      <site-links variant="cards"></site-links>
+      <site-links variant="list"></site-links>
     </section>
+    </div>
   </main>
 
   <site-footer></site-footer>

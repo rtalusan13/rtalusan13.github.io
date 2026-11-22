@@ -86,6 +86,8 @@ Download button appears; change `updated:` when you do.
 (code | full title | status | skills). Status: `completed` (green), `in progress` (yellow) or `planned` (gray, labeled
 "Planned/Future Coursework"; `future`, `planning` and `registered` work too).
 `planned (Spring 2027)` also shows the term on the hover card.
+For a plain list with no status or colors (like high school classes), put ordinary list lines
+under the heading instead: `- Linear Algebra`. They show as simple chips in that row's dropdown.
 
 **Write a journal entry.** Create `journals/my-entry.md` (lowercase, dashes, no spaces) starting with:
 
@@ -99,6 +101,13 @@ published: 2026-10-19
 
 then write the entry in Markdown. Add `my-entry.md` as a new line in the `<template>` in
 `journal.html`. Add an `updated:` date when you edit it later. Images go in `journals/images/`.
+
+**Your portrait.** Replace `assets/images/portrait.jpg` with your photo (keep the name; 800×1000
+JPG, under ~200 KB). Until then it shows an RT monogram. Once it's your photo, uncomment the
+`og:image` line in `index.html` so link previews show it too.
+
+**Project images.** `assets/images/covers/` has an illustration for each project. To use a real
+photo instead, save it in `assets/images/` (1200×750) and point that project's `image:` line at it.
 
 **Add a carousel photo.** Export it about 1600 px wide as JPG (under ~500 KB) into
 `image_carousel/`, then add a line to the carousel's `<template>` in `index.html`:

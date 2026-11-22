@@ -95,6 +95,8 @@ def image_size(p):
 def find_placeholders(text, source):
     for i, line in enumerate(text.split("\n"), 1):
         for m in PLACEHOLDER.finditer(line):
+            if re.search(r"\d", m.group(1)):          # [3.50+ GPA] and the like are real text
+                continue
             placeholders.append(f"{rel(source)}, line {i}: [{m.group(1)}]")
 
 

@@ -492,8 +492,10 @@ main {
    Desktop: about text across the top; carousel left, facts right. */
 .about { display: grid; gap: 32px; }
 .about-text .h2 { margin-bottom: 16px; }
-.about-text p { max-width: 62ch; }
+.about-text p { max-width: 62ch; color: var(--muted); }
 .about-text p + p { margin-top: 14px; }
+.about-text .about-lead { font-size: clamp(1.125rem, 2.2vw, 1.3125rem); line-height: 1.45; font-weight: 550; letter-spacing: -0.01em; color: var(--text); text-wrap: balance; }
+
 .facts {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -526,7 +528,8 @@ main {
   border: 1px solid var(--line);
   border-radius: 28px;
 }
-.cta-band p { max-width: 42ch; margin: 12px auto 28px; color: var(--muted); }
+.cta-band p { max-width: 52ch; margin: 12px auto 0; color: var(--muted); text-wrap: balance; }
+.cta-band .cta-email { margin: 6px auto 28px; font-weight: 500; color: var(--text); }
 
 /* =========================================================
    10. Site footer
@@ -608,25 +611,90 @@ main {
 
 
 /* =========================================================
-   13. Contact page (cards come from <site-links variant="cards">)
+   13. Contact page (list comes from <site-links variant="list">)
    ========================================================= */
-.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; }
-.contact-card {
-  position: relative;
-  display: grid;
-  gap: 2px;
-  padding: 20px 52px 20px 22px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
-  transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s var(--ease-out);
+/* One row per way to reach you, stacked, each with its logo. Rows are
+   separated by hairlines (not boxed), and the logo fills with its brand
+   color when you point at the row. Markup: js/layout.js (linkList). */
+/* The page is one centered column, so it lines up under the centered nav bar */
+.contact-page { max-width: 640px; margin-inline: auto; }
+.contact-page .page-head { text-align: center; }
+.contact-page .lede { margin-inline: auto; text-wrap: balance; }
+.contact-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.contact-item {
+  --c: var(--primary); --c-soft: var(--primary-soft);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
 }
-.contact-card:hover { transform: translateY(-2px); border-color: var(--primary-line); box-shadow: 0 14px 30px -16px rgb(28 43 82 / 0.35); }
-.contact-card:first-child { border-color: var(--primary-line); background: var(--primary-soft); }
+.contact-item[data-kind="email"]    { --c: var(--coral); --c-soft: #fff0ea; }
+.contact-item[data-kind="linkedin"] { --c: #0a66c2;      --c-soft: #e8f1fb; }
+.contact-item[data-kind="github"]   { --c: #1f2328;      --c-soft: #eff1f3; }
+.contact-link {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 4px;
+}
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: var(--c-soft);
+  color: var(--c);
+  transition: background-color 0.25s, color 0.25s, transform 0.35s var(--ease-spring);
+}
+.contact-text { display: grid; gap: 1px; min-width: 0; }
 .contact-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
-.contact-value { font-weight: 500; overflow-wrap: anywhere; }
-.contact-arrow { position: absolute; top: 20px; right: 20px; color: var(--muted); transition: transform 0.25s var(--ease-out), color 0.2s; }
-.contact-card:hover .contact-arrow { transform: translate(2px, -2px); color: var(--primary); }
+.contact-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s;
+}
+.contact-note { font-size: 0.875rem; color: var(--muted); }
+.contact-arrow { color: var(--faint); transition: transform 0.25s var(--ease-out), color 0.2s; }
+
+.contact-link:hover .contact-icon,
+.contact-link:focus-visible .contact-icon { background: var(--c); color: #fff; transform: scale(1.06); }
+.contact-link:hover .contact-value { text-decoration-color: currentColor; }
+.contact-link:hover .contact-arrow { color: var(--c); transform: translateX(3px); }
+.contact-item:not([data-kind="email"]) .contact-link:hover .contact-arrow { transform: translate(2px, -2px); }
+.contact-link:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 12px; }
+
+/* "Copy" next to the email address */
+.contact-copy {
+  flex: none;
+  padding: 6px 13px;
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.contact-copy:hover { background: var(--surface); color: var(--text); }
+.contact-copy.copied { border-color: #a7f3d0; background: #ecfdf5; color: #047857; }
+
+@media (max-width: 600px) {
+  .contact-link { gap: 14px; padding-block: 18px; }
+  .contact-icon { width: 44px; height: 44px; border-radius: 13px; }
+  .contact-icon svg { width: 20px; height: 20px; }
+  .contact-value { font-size: 1rem; }
+  .contact-arrow { display: none; }            /* the whole row is the link; keep room for the text */
+}
 
 
 /* =========================================================

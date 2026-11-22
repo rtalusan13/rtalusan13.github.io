@@ -60,7 +60,14 @@
      status: completed (green), in progress (yellow), or planned (gray, shown
      as "Planned/Future Coursework"; future, planning and registered also work).
      A term in parentheses after it is shown on the card. The ### line right above
-     becomes the group's label ("Coursework" if there isn't one). */
+     becomes the group's label ("Coursework" if there isn't one).
+
+     Plain list lines (no | status) under a ### heading that mentions courses
+     become simple chips instead: no colors, no status key, no hover card.
+
+       ### Relevant coursework
+       - Linear Algebra
+       - Differential Equations */
   const STATUSES = [
     { key: "done", label: "Completed",   match: /^(completed?|done|taken|finished|passed)$/ },
     { key: "now",  label: "In progress", match: /^(in[ -]?progress|current|currently taking|taking|ongoing|now)$/ },
@@ -84,13 +91,34 @@
     };
   }
 
+  const COURSE_HEADING = /^#{3,6}\s+(.*cours.*?)\s*#*\s*$/i;   // "### Relevant coursework", "### Courses"
+  const LIST_ITEM = /^\s*[-*+]\s+(.+?)\s*$/;
+  const plainText = t => t.replace(/\*\*|__|[*_`]/g, "").trim();
+
   // Splits a row's text into Markdown parts and course groups, in order.
   function splitCourses(text) {
     const lines = text.split("\n");
     const parts = [];
     let md = [];
     const flush = () => { if (md.join("").trim()) parts.push({ md: md.join("\n") }); md = []; };
+    const nextFilled = k => { while (k < lines.length && !lines[k].trim()) k++; return k; };
     for (let i = 0; i < lines.length; i++) {
+      // A course heading over plain list lines: simple chips.
+      const ch = COURSE_HEADING.exec(lines[i]);
+      if (ch) {
+        let k = nextFilled(i + 1);
+        if (k < lines.length && LIST_ITEM.test(lines[k]) && !parseCourse(lines[k])) {
+          const names = [];
+          while (k < lines.length && LIST_ITEM.test(lines[k]) && !parseCourse(lines[k])) {
+            names.push(plainText(LIST_ITEM.exec(lines[k])[1]));
+            i = k;
+            k = nextFilled(k + 1);
+          }
+          flush();
+          parts.push({ label: ch[1], names });
+          continue;
+        }
+      }
       const first = parseCourse(lines[i]);
       if (!first) { md.push(lines[i]); continue; }
       let j = md.length - 1;                         // a ### heading just above names the group
@@ -111,6 +139,18 @@
     }
     flush();
     return parts;
+  }
+
+  // Course names as plain chips (no status), e.g. high school coursework.
+  function plainCourseGroup({ label, names }) {
+    const box = el("div", "rz-courses");
+    const head = el("div", "rz-courses-head");
+    head.append(el("h4", "rz-courses-title", label));
+    const list = el("ul", "tags rz-course-tags");
+    list.setAttribute("aria-label", label);
+    names.forEach(n => list.append(el("li", "", n)));
+    box.append(head, list);
+    return box;
   }
 
   function courseGroup({ label, items }) {
@@ -315,6 +355,7 @@
       const content = el("div", "rz-content");
       if (bodyText) {
         splitCourses(bodyText).forEach(part => {
+          if (part.names) { content.append(plainCourseGroup(part)); return; }
           if (!part.md) { content.append(courseGroup(part)); return; }
           const tmp = el("div");
           tmp.innerHTML = markdown(part.md);

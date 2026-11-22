@@ -261,6 +261,7 @@ button.rz-row:hover .rz-chev { background: #fff; color: var(--text); }
 .rz-content li + li { margin-top: 0.4em; }
 .rz-content a { text-decoration: underline; text-underline-offset: 3px; }
 .rz-content .tags { margin-top: 14px; }
+.rz-content .tags li { margin: 0; }                /* chips line up (no list spacing) */
 
 
 /* ---------- E. Course bubbles + hover card ----------
@@ -279,6 +280,8 @@ button.rz-row:hover .rz-chev { background: #fff; color: var(--text); }
 
 .rz-content .rz-course-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 10px 0 4px; list-style: none; }
 .rz-content .rz-course-list li { margin: 0; }
+.rz-content .rz-course-tags { gap: 8px; margin-top: 10px; padding: 0; }   /* plain course chips (no status) */
+.rz-content .rz-course-tags li { padding: 4px 12px; font-size: 0.8125rem; }
 .rz-course {
   display: inline-flex;
   align-items: center;

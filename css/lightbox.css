@@ -1,0 +1,120 @@
+/* =========================================================
+   LIGHTBOX  (pairs with js/lightbox.js)
+   A photo almost full screen over a blurred, dimmed page. Slides sit in a
+   sideways-scrolling track, so phones and trackpads swipe natively.
+   ========================================================= */
+
+html.lb-open { overflow: hidden; }                 /* the page behind doesn't scroll */
+
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;                                    /* above the nav, menus and edge blur */
+  background: rgb(10 16 36 / 0.82);                /* fallback: no backdrop blur */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lb {
+    background: rgb(10 16 36 / 0.62);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.2);
+  }
+}
+.lb[hidden] { display: none; }
+.lb.show { opacity: 1; }
+
+/* ---------- Photos ---------- */
+.lb-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.lb-track::-webkit-scrollbar { display: none; }
+.lb-slide {
+  flex: 0 0 100%;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 72px clamp(12px, 6vw, 88px) 96px;      /* room for the X on top, counter below, arrows at the sides */
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.lb-slide img {
+  max-width: 100%;
+  max-height: calc(100vh - 168px);                 /* fallback: browsers without dvh */
+  max-height: calc(100dvh - 168px);                /* the slide's top + bottom padding */
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  background: rgb(255 255 255 / 0.06);
+  transform: scale(0.96);
+  transition: transform 0.3s var(--ease-out, ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.lb.show .lb-slide img { transform: none; }
+
+/* ---------- Buttons ---------- */
+.lb-btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.92);
+  color: #111827;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
+  transition: background-color 0.2s, transform 0.25s var(--ease-spring, ease-out);
+}
+.lb-btn:hover { background: #fff; transform: scale(1.06); }
+.lb-btn:active { transform: scale(0.94); }
+.lb-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.lb-close { top: 16px; right: 16px; width: 48px; height: 48px; }
+.lb-prev, .lb-next { top: 50%; width: 46px; height: 46px; margin-top: -23px; }
+.lb-prev { left: clamp(8px, 2vw, 24px); }
+.lb-next { right: clamp(8px, 2vw, 24px); }
+.lb-one .lb-prev, .lb-one .lb-next, .lb-one .lb-count { display: none; }
+
+/* ---------- Caption + counter ---------- */
+.lb-meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  pointer-events: none;
+  text-align: center;
+}
+.lb-cap { margin: 0; max-width: min(90vw, 60ch); color: #fff; font-weight: 600; text-shadow: 0 1px 8px rgb(0 0 0 / 0.5); }
+.lb-cap:empty { display: none; }
+.lb-count {
+  margin: 0;
+  padding: 6px 11px;
+  border-radius: 9999px;
+  background: rgb(0 0 0 / 0.4);
+  color: rgb(255 255 255 / 0.75);
+  font: 500 0.75rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.14em;
+}
+.lb-count b { color: #fff; font-weight: 500; }
+
+/* Phones: swipe instead of side arrows; a bit less padding */
+@media (hover: none) and (pointer: coarse), (max-width: 600px) {
+  .lb-prev, .lb-next { display: none; }
+  .lb-slide { padding: 68px 10px 92px; }
+  .lb-slide img { max-height: calc(100vh - 160px); max-height: calc(100dvh - 160px); }
+}
+
+/* Things that open the lightbox */
+.lb-zoomable,
+.has-lightbox .fp-card[aria-current] { cursor: zoom-in; }
+.lb-zoomable:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }

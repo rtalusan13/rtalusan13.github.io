@@ -98,14 +98,15 @@
     root.dataset.variant = "single";
     root.dataset.autoplay = "0";
     root.dataset.controls = "inside";
-    root.setAttribute("aria-label", "Photos: " + p.title.split(":")[0]);
-    root.style.setProperty("--fp-aspect", "16 / 10");
+    const name = p.title.split(":")[0];
+    root.setAttribute("aria-label", "Photos: " + name);
+    root.style.setProperty("--fp-aspect", "4 / 3");
     const tpl = document.createElement("template");
     p.images.forEach(im => {
       const img = document.createElement("img");
       img.setAttribute("src", im.src);
       img.setAttribute("alt", im.alt);
-      img.dataset.title = im.alt;
+      img.dataset.title = name;          // caption in the full-screen viewer
       tpl.content.append(img);
     });
     root.append(tpl);
@@ -159,6 +160,9 @@
       const top = el("div", "pj-top");
       const media = gallery(p, () => top.classList.add("no-media"));
       if (media) top.append(media); else top.classList.add("no-media");
+      if (media && p.images.length < 2 && window.Lightbox) {   // one image: tap it to view full screen
+        window.Lightbox.attach(media, [{ src: p.image, alt: p.alt, title: p.title.split(":")[0] }]);
+      }
 
       const info = el("div", "pj-info");
       const meta = metaRow(p, true);

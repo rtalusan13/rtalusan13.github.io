@@ -446,7 +446,7 @@ main {
 .project-card:focus-within { outline: 2px solid var(--link); outline-offset: 3px; }   /* fallback: no :has() */
 .project-card:has(a:focus-visible) { outline: 2px solid var(--link); outline-offset: 3px; }
 .project-card:focus-within:not(:has(a:focus-visible)) { outline: none; }
-.project-media { aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface); }
+.project-media { aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); }
 .project-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
 .project-card:hover .project-media img { transform: scale(1.03); }
 .project-body { display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 20px 22px 22px; }

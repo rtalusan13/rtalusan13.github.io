@@ -23,6 +23,9 @@
 //   data-controls  "inside" = small arrows and the counter sit inside the photo
 //                  frame (no caption, no bar). Used on the Projects page.
 //
+// Tapping the photo that's showing opens it almost full screen (js/lightbox.js,
+// if the page loads it); so does Enter while the carousel has keyboard focus.
+//
 // Carousels added to the page later (e.g. built from Markdown) start with:
 //   window.Carousel.init(element)
 // =========================================================
@@ -119,7 +122,8 @@
 
     const autoplayOn = () => duration > 0 && n > 1 && !reduceMotion.matches;
     const keyboardFocused = () => root.matches(":focus-visible") || !!root.querySelector(":focus-visible");
-    const paused = () => !onScreen || document.hidden || hovering || pressing || dragging || keyboardFocused();
+    const viewerOpen = () => document.documentElement.classList.contains("lb-open");
+    const paused = () => !onScreen || document.hidden || hovering || pressing || dragging || keyboardFocused() || viewerOpen();
 
     function setBar(p) { fill.style.transform = "scaleX(" + p.toFixed(4) + ")"; }
 
@@ -225,9 +229,18 @@
     /* ---------- Input ---------- */
     root.querySelectorAll(".fp-btn").forEach(b =>
       b.addEventListener("click", () => userGo(active + Number(b.dataset.dir))));
+    // Full-screen viewer: opens on the photo showing, and lands back on
+    // whichever photo was showing in the viewer when it closes.
+    function openViewer(i) {
+      if (!window.Lightbox) return;
+      const list = slides.map(s => ({ src: s.src, alt: s.alt, title: s.title }));
+      window.Lightbox.open(list, i, j => { if (j !== active) userGo(j); });
+    }
+
     root.addEventListener("keydown", e => {
       if (e.key === "ArrowRight") userGo(active + 1);
       else if (e.key === "ArrowLeft") userGo(active - 1);
+      else if ((e.key === "Enter" || e.key === " ") && e.target === root) openViewer(active);
       else return;
       e.preventDefault();
     });
@@ -273,6 +286,7 @@
     cards.forEach((c, i) => c.addEventListener("click", e => {
       if (justDragged) return e.preventDefault();
       if (i !== active) userGo(i);
+      else openViewer(i);
     }));
 
     /* ---------- Visibility ---------- */

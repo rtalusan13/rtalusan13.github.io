@@ -7,7 +7,7 @@
   kicker: ECE 385                     small label above the title (course, team, etc.)
   date: Fall 2025                     when (any text)
   status: In progress                 optional badge
-  image: assets/images/file.jpg       1200×750 (16:10), under ~300 KB (.svg works too)
+  image: assets/images/file.jpg       4:3 (e.g. 1600×1200), under ~500 KB (.svg works too)
   alt: What the image shows           for screen readers
   image: / alt: again                 more photos: the Projects page shows them as a carousel
                                       (each alt: describes the image line above it)
@@ -56,8 +56,8 @@ An operating system for RISC-V embedded systems, written in C and assembly, with
 ## SoLoGUI: Sound Localization Data Pipeline & GUI
 id: sologui
 kicker: Poster presentation
-image: assets/images/covers/sologui.svg
-alt: Illustration of a polar sound-localization plot beside a waveform and an accuracy-versus-SNR bar chart
+image: assets/images/projects/talusan_urs.jpeg
+alt: The SoLoGUI research poster: introduction, system architecture, figures of the MATLAB GUI and behavioral-accuracy plots, analysis methods, and next steps
 image: assets/images/projects/sologui-poster.jpg
 alt: Raphael standing beside his SoLoGUI research poster at a poster session
 summary: Parses raw LabVIEW data and batch-computes latency and accuracy metrics across 16 subjects, with a benchmarking framework and GUI for SNR threshold testing.

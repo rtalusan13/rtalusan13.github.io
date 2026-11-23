@@ -109,6 +109,8 @@ picture link previews show (`og:image` in `index.html`).
 go in `assets/images/projects/` (about 1600 px wide JPG). Add another `image:` line, with an `alt:`
 line under it, and the Projects page shows that project's images as a carousel; the first image is
 also the one on the home page card.
+Tapping a project image or an About photo opens it almost full screen (`js/lightbox.js`); the
+headshot doesn't. Images are 4:3 (1600×1200 is ideal), so phone photos fit without cropping.
 
 **Add a carousel photo.** Export it about 1600 px wide as JPG (under ~500 KB) into
 `image_carousel/`, then add a line to the carousel's `<template>` in `index.html`:

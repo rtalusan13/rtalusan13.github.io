@@ -18,7 +18,7 @@
   if (!roots.length || !C) return;
 
   const SRC = "content/projects.md";
-  const KEYS = ["id", "kicker", "date", "status", "image", "alt", "summary", "tags", "links", "featured"];
+  const KEYS = ["id", "kicker", "date", "status", "image", "alt", "summary", "tags", "links", "repo", "featured"];
   const PAGE = "projects.html";
 
   function el(tag, className, text) {
@@ -52,6 +52,7 @@
       summary: d.summary || "",
       tags: (d.tags || "").split(",").map(t => t.trim()).filter(Boolean),
       links,
+      repo: (d.repo || "").trim(),
       featured: C.yes(d.featured),
       body: entry.body,
     };
@@ -114,6 +115,24 @@
     return box;
   }
 
+  // "repo:" link: a button with the GitHub logo and the repo's name, e.g.
+  //   [GitHub logo]  View code   rtalusan13/SoLoGUI   ↗
+  function repoButton(href) {
+    const a = el("a", "pj-repo");
+    a.href = href;
+    if (/^https?:/i.test(href)) { a.target = "_blank"; a.rel = "noopener"; }
+    const path = href.replace(/^https?:\/\/(www\.)?github\.com\//i, "").replace(/\/+$/, "");
+    const icon = el("span", "pj-repo-icon");
+    icon.innerHTML = window.Icons ? window.Icons.svg("github", 20) : "";
+    const text = el("span", "pj-repo-text");
+    text.append(el("span", "pj-repo-label", "View code"), el("span", "pj-repo-path", path));
+    const arrow = el("span", "pj-repo-arrow");
+    arrow.innerHTML = window.Icons ? window.Icons.svg("arrow", 14) : "↗";
+    a.append(icon, text, arrow);
+    a.setAttribute("aria-label", "View the code on GitHub: " + path + " (opens in a new tab)");
+    return a;
+  }
+
   /* ---------- Home page: cards ---------- */
   function renderCards(root, projects) {
     const limit = Number(root.dataset.limit) || 3;
@@ -171,8 +190,9 @@
       if (p.summary) info.append(el("p", "pj-summary", p.summary));
       const tags = tagList(p.tags);
       if (tags) info.append(tags);
-      if (p.links.length) {
+      if (p.repo || p.links.length) {
         const row = el("div", "pj-links");
+        if (p.repo) row.append(repoButton(p.repo));
         p.links.forEach(l => {
           const a = el("a", "btn btn-outline", l.label);
           a.href = l.href;

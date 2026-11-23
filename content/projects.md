@@ -13,6 +13,7 @@
                                       (each alt: describes the image line above it)
   summary: One or two sentences.      shown on the cards and at the top of its section
   tags: SystemVerilog, FPGA           chips
+  repo: https://github.com/you/repo   "View code" button with the GitHub logo (Projects page only)
   links: [Code](https://github.com/...), [Demo](https://...)
   featured: yes                       also show it on the home page (first one gets the big card)
 
@@ -62,6 +63,7 @@ image: assets/images/projects/sologui-poster.jpg
 alt: Raphael standing beside his SoLoGUI research poster at a poster session
 summary: Parses raw LabVIEW data and batch-computes latency and accuracy metrics across 16 subjects, with a benchmarking framework and GUI for SNR threshold testing.
 tags: MATLAB, LabVIEW, Excel
+repo: https://github.com/rtalusan13/SoLoGUI
 featured: yes
 
 A MATLAB data pipeline and GUI for a sound-localization study, presented as a research poster.

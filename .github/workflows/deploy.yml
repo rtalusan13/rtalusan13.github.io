@@ -25,11 +25,9 @@ concurrency:                  # one deploy at a time; a newer push waits its tur
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  # 1. Gather the site's files and upload them as the Pages artifact.
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
 
@@ -46,11 +44,21 @@ jobs:
           find . -name '*.html' -exec sed -i -E "s#((src|href)=\"[^\"]+\.(css|js))\"#\1?v=$v\"#g" {} +
           echo "Publishing $(find . -type f | wc -l) files"
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: ${{ runner.temp }}/site
 
+  # 2. Publish it. A separate job, so it only starts once the upload above has
+  #    fully finished; deploying in the same job right after the upload can
+  #    fail with 'No artifacts named "github-pages" were found'.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

@@ -52,7 +52,8 @@
   // Reads the shared format used by content/*.md:
   //   # Section | Short name          (optional; sections become tabs, etc.)
   //   ## Entry title
-  //   key: value                       (only keys listed in `keys`, right under ##)
+  //   key: value                       (only keys listed in `keys`, right under ##;
+  //                                     a key may repeat: entry.all[key] keeps every value)
   //   (blank line, then the entry's Markdown)
   // Entries written before any # heading go into one unnamed section.
   // HTML comments are ignored.
@@ -77,7 +78,7 @@
       }
       if (!inCode && (m = line.match(/^##\s+(.+?)\s*#*\s*$/))) {
         if (!section) newSection("", "");
-        entry = { title: m[1], details: {}, body: [] };
+        entry = { title: m[1], details: {}, all: {}, body: [] };
         section.entries.push(entry);
         inDetails = true;
         continue;
@@ -86,7 +87,12 @@
       if (!entry) { section.intro.push(line); continue; }
       if (inDetails) {
         const kv = line.match(/^\s*([A-Za-z]+)\s*:\s*(.*?)\s*$/);
-        if (kv && allowed.has(kv[1].toLowerCase())) { entry.details[kv[1].toLowerCase()] = kv[2]; continue; }
+        if (kv && allowed.has(kv[1].toLowerCase())) {
+          const key = kv[1].toLowerCase();
+          entry.details[key] = entry.details[key] == null ? kv[2] : entry.details[key];   // first one wins
+          (entry.all[key] = entry.all[key] || []).push(kv[2]);
+          continue;
+        }
         inDetails = false;                              // first other line ends the details
         if (!line.trim()) continue;
       }

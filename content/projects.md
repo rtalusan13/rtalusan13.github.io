@@ -9,6 +9,8 @@
   status: In progress                 optional badge
   image: assets/images/file.jpg       1200×750 (16:10), under ~300 KB (.svg works too)
   alt: What the image shows           for screen readers
+  image: / alt: again                 more photos: the Projects page shows them as a carousel
+                                      (each alt: describes the image line above it)
   summary: One or two sentences.      shown on the cards and at the top of its section
   tags: SystemVerilog, FPGA           chips
   links: [Code](https://github.com/...), [Demo](https://...)
@@ -56,6 +58,8 @@ id: sologui
 kicker: Poster presentation
 image: assets/images/covers/sologui.svg
 alt: Illustration of a polar sound-localization plot beside a waveform and an accuracy-versus-SNR bar chart
+image: assets/images/projects/sologui-poster.jpg
+alt: Raphael standing beside his SoLoGUI research poster at a poster session
 summary: Parses raw LabVIEW data and batch-computes latency and accuracy metrics across 16 subjects, with a benchmarking framework and GUI for SNR threshold testing.
 tags: MATLAB, LabVIEW, Excel
 featured: yes

@@ -7,6 +7,8 @@
      "focus" .... (default) centre photo sharp, neighbours peek
                   in from the sides, blurred, smaller and faded
 
+   data-controls="inside": arrows and counter inside the photo (see below)
+
    Knobs you can set per carousel with style="...":
      --fp-aspect   photo shape, default 4 / 3 (phone photos)
      --fp-w        photo width in the "focus" variant
@@ -103,6 +105,40 @@
 .fp-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--text); transform-origin: left; transform: scaleX(0); }
 
 .fp-sr { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Controls inside the frame (data-controls="inside", Projects page):
+   small round arrows on the photo's left and right edges, the counter in a
+   pill at the bottom. No caption or timer bar. ---------- */
+.fp-root[data-controls="inside"] { gap: 0; height: 100%; border-radius: inherit; }
+.fp-root[data-controls="inside"]:focus-visible { outline-offset: -3px; }
+.fp-root[data-controls="inside"] .fp-card { border-radius: 0; }
+.fp-root[data-controls="inside"] .fp-meta { position: absolute; inset: 0; display: block; padding: 0; pointer-events: none; }
+.fp-root[data-controls="inside"] .fp-cap,
+.fp-root[data-controls="inside"] .fp-bar { display: none; }
+.fp-root[data-controls="inside"] .fp-nav { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; padding-inline: 10px; }
+.fp-root[data-controls="inside"] .fp-btn {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: rgb(255 255 255 / 0.88);
+  color: var(--text);
+  box-shadow: 0 2px 10px rgb(15 23 42 / 0.25);
+  pointer-events: auto;
+  transition: background-color 0.2s, transform 0.25s var(--ease-spring);
+}
+.fp-root[data-controls="inside"] .fp-btn:hover { background: #fff; color: var(--text); transform: scale(1.08); }
+.fp-root[data-controls="inside"] .fp-btn:active { transform: scale(0.94); }
+.fp-root[data-controls="inside"] .fp-count {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  padding: 6px 10px 6px 11px;
+  border-radius: 9999px;
+  background: rgb(15 23 42 / 0.58);
+  color: rgb(255 255 255 / 0.75);
+}
+.fp-root[data-controls="inside"] .fp-count b { color: #fff; }
 
 /* Only one photo: nothing to navigate */
 .fp-root.fp-one .fp-nav,

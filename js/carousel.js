@@ -20,6 +20,11 @@
 //   data-variant   "single" = one photo at a time
 //                  "focus"  = (default) neighbours peek in, blurred
 //   data-autoplay  ms per slide, shown as a filling bar. "0" = off. Default 5000.
+//   data-controls  "inside" = small arrows and the counter sit inside the photo
+//                  frame (no caption, no bar). Used on the Projects page.
+//
+// Carousels added to the page later (e.g. built from Markdown) start with:
+//   window.Carousel.init(element)
 // =========================================================
 (function () {
   const BLUR = 7;                                    // px of blur one photo away (focus variant)
@@ -282,5 +287,7 @@
     paint();
   }
 
-  document.querySelectorAll("[data-carousel]").forEach(init);
+  const start = root => { if (root.dataset.fpReady) return; root.dataset.fpReady = "1"; init(root); };
+  document.querySelectorAll("[data-carousel]").forEach(start);
+  window.Carousel = { init: start };
 })();

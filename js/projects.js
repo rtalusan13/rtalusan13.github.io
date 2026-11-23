@@ -5,6 +5,10 @@
 //   <div class="project-grid" data-projects="featured"></div>   home page cards
 //   <div data-projects="all"></div>                             full Projects page
 //
+// A project with more than one "image:" line gets a photo carousel on the
+// Projects page (each "alt:" describes the image above it). Home page cards
+// show the first image only.
+//
 // Needs js/content.js first; the Projects page also needs
 // js/vendor/marked.umd.js for the write-ups.
 // =========================================================
@@ -29,6 +33,11 @@
     let id = C.slug(d.id || entry.title);
     while (used.has(id)) id += "-2";
     used.add(id);
+    const all = entry.all || {};
+    const images = (all.image || []).map((src, i) => ({
+      src,
+      alt: (all.alt || [])[i] != null ? all.alt[i] : entry.title + (i ? " (photo " + (i + 1) + ")" : ""),
+    }));
     const links = [];
     (d.links || "").replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => { links.push({ label, href }); return ""; });
     return {
@@ -39,6 +48,7 @@
       status: d.status || "",
       image: d.image || "",
       alt: d.alt != null ? d.alt : entry.title,
+      images,
       summary: d.summary || "",
       tags: (d.tags || "").split(",").map(t => t.trim()).filter(Boolean),
       links,
@@ -75,6 +85,31 @@
     img.decoding = "async";
     img.addEventListener("error", () => { box.remove(); if (onMissing) onMissing(); }, { once: true });
     box.append(img);
+    return box;
+  }
+
+  // Several images: a carousel with small arrows and a counter inside the frame
+  // (js/carousel.js, data-controls="inside"). One image: a plain picture.
+  function gallery(p, onMissing) {
+    if (p.images.length < 2 || !window.Carousel) return picture(p, "pj-media", onMissing);
+    const box = el("div", "pj-media");
+    const root = el("div", "fp-root");
+    root.dataset.carousel = "";
+    root.dataset.variant = "single";
+    root.dataset.autoplay = "0";
+    root.dataset.controls = "inside";
+    root.setAttribute("aria-label", "Photos: " + p.title.split(":")[0]);
+    root.style.setProperty("--fp-aspect", "16 / 10");
+    const tpl = document.createElement("template");
+    p.images.forEach(im => {
+      const img = document.createElement("img");
+      img.setAttribute("src", im.src);
+      img.setAttribute("alt", im.alt);
+      img.dataset.title = im.alt;
+      tpl.content.append(img);
+    });
+    root.append(tpl);
+    box.append(root);
     return box;
   }
 
@@ -122,7 +157,7 @@
       const art = el("article", "pj");
       art.id = p.id;
       const top = el("div", "pj-top");
-      const media = picture(p, "pj-media", () => top.classList.add("no-media"));
+      const media = gallery(p, () => top.classList.add("no-media"));
       if (media) top.append(media); else top.classList.add("no-media");
 
       const info = el("div", "pj-info");
@@ -153,6 +188,7 @@
       }
       root.append(art);
     });
+    root.querySelectorAll("[data-carousel]").forEach(c => window.Carousel.init(c));
 
     // The address may point at a project (projects.html#aurora-os); it didn't
     // exist when the page first loaded, so scroll to it now.

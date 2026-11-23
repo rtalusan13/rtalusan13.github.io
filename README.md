@@ -102,12 +102,13 @@ published: 2026-10-19
 then write the entry in Markdown. Add `my-entry.md` as a new line in the `<template>` in
 `journal.html`. Add an `updated:` date when you edit it later. Images go in `journals/images/`.
 
-**Your portrait.** Replace `assets/images/portrait.jpg` with your photo (keep the name; 800×1000
-JPG, under ~200 KB). Until then it shows an RT monogram. Once it's your photo, uncomment the
-`og:image` line in `index.html` so link previews show it too.
+**Your portrait.** `assets/images/portrait.jpg` (800×1000 JPG, under ~200 KB). It's also the
+picture link previews show (`og:image` in `index.html`).
 
-**Project images.** `assets/images/covers/` has an illustration for each project. To use a real
-photo instead, save it in `assets/images/` (1200×750) and point that project's `image:` line at it.
+**Project images.** `assets/images/covers/` has an illustration for each project. Project photos
+go in `assets/images/projects/` (about 1600 px wide JPG). Add another `image:` line, with an `alt:`
+line under it, and the Projects page shows that project's images as a carousel; the first image is
+also the one on the home page card.
 
 **Add a carousel photo.** Export it about 1600 px wide as JPG (under ~500 KB) into
 `image_carousel/`, then add a line to the carousel's `<template>` in `index.html`:
